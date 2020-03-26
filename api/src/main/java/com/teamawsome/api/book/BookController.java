@@ -1,4 +1,4 @@
-package com.teamawsome.api;
+package com.teamawsome.api.book;
 
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;

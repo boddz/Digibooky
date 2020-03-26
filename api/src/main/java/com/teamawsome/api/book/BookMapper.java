@@ -1,7 +1,6 @@
-package com.teamawsome.api;
+package com.teamawsome.api.book;
 
 
-import com.teamawsome.api.BookDto;
 import com.teamawsome.domain.book.Book;
 import org.springframework.stereotype.Component;
 
