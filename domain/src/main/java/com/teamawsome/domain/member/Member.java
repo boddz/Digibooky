@@ -3,7 +3,7 @@ package com.teamawsome.domain.member;
 public class Member {
     private final int id;
     private final int inss;
-    private  String eMail;
+    private String eMail;
     private final String firstName;
     private final String lastName;
     private String streetName;
@@ -14,7 +14,7 @@ public class Member {
 
     public Member(int inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.id = counter;
-        counter ++;
+        counter++;
         this.inss = checkIfValidInss(inss);
         this.eMail = checkIfValidEmail(eMail);
         this.firstName = firstName;
@@ -25,8 +25,11 @@ public class Member {
         this.city = city;
     }
 
-    private String checkIfValidEmail(String eMail) {  // to be implemented
-    return eMail;
+    private String checkIfValidEmail(String eMail) {
+        String regex = "(.*)(\\@)(.*)(\\.)(.*)";
+        if (!eMail.matches(regex))
+            throw new IllegalArgumentException("Wrong form of Email");
+        return eMail;
     }
 
     private int checkIfValidInss(int inss) {   // to be implemented
