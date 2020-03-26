@@ -13,7 +13,7 @@ public class MemberDto {
     private int postalCode;
     private String city;
 
-    public MemberDto(Member member) {
+    public MemberDto(int id, int inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.id = id;
         this.inss = inss;
         this.eMail = eMail;
