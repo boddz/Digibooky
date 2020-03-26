@@ -10,24 +10,9 @@ pipeline {
                sh 'mvn clean test-compile'
             }
         }
-        stage('api') {
+        stage('Testing') {
             steps {
-                sh 'cd api && mvn -Dmaven.test.failure.ignore=true test'
-            }
-        }
-        stage('domain') {
-            steps {
-                sh 'cd domain && mvn -Dmaven.test.failure.ignore=true test'
-            }
-        }
-        stage('infrastructure') {
-            steps {
-                sh 'cd infrastructure && mvn -Dmaven.test.failure.ignore=true test'
-            }
-        }
-        stage('service') {
-            steps {
-                sh 'cd service && mvn -Dmaven.test.failure.ignore=true test'
+                sh 'mvn -Dmaven.test.failure.ignore=true test'
             }
         }
     }
