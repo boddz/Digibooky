@@ -24,6 +24,6 @@ public class MemberController {
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO){
         Member newMember = new Member(memberRegistryDTO.inss, memberRegistryDTO.eMail,memberRegistryDTO.firstName,memberRegistryDTO.lastName,memberRegistryDTO.streetName,memberRegistryDTO.houseNumber,memberRegistryDTO.postalCode,memberRegistryDTO.city);
         memberRepository.addMember(newMember);
-        return new MemberDto()
+        return new MemberDto(newMember);
     }
 }

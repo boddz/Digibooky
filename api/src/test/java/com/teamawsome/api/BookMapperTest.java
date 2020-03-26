@@ -1,5 +1,7 @@
 package com.teamawsome.api;
 
+import com.teamawsome.api.book.BookDto;
+import com.teamawsome.api.book.BookMapper;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import org.assertj.core.api.Assertions;

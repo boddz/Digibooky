@@ -56,5 +56,45 @@ public class Member {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
+    public int getInss() {
+        return inss;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public int getHouseNumber() {
+        return houseNumber;
+    }
+
+    public int getPostalCode() {
+        return postalCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
 

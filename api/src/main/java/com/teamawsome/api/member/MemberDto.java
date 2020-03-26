@@ -14,14 +14,14 @@ public class MemberDto {
     private String city;
 
     public MemberDto(Member member) {
-        this.id = id;
-        this.inss = inss;
-        this.eMail = eMail;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.streetName = streetName;
-        this.houseNumber = houseNumber;
-        this.postalCode = postalCode;
-        this.city = city;
+        this.id = member.getId();
+        this.inss = member.getInss();
+        this.eMail = member.geteMail();
+        this.firstName = member.getFirstName();
+        this.lastName = member.getLastName();
+        this.streetName = member.getStreetName();
+        this.houseNumber = member.getHouseNumber();
+        this.postalCode = member.getPostalCode();
+        this.city = member.getCity();
     }
 }
