@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.teamawsome</groupId>
-            <artifactId>infrastructure</artifactId>
+            <artifactId>service</artifactId>
         </dependency>
 
             <dependency>

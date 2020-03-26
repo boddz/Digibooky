@@ -19,9 +19,11 @@ public class MemberController {
         this.memberMapper = memberMapper;
     }
 
-  /*  @PostMapping (consumes = "application/json", produces = "application/json")
+    @PostMapping (consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO){
-        Member newMember = new Member(memberRegistryDTO.inss, memberRegistryDTO.)
-    }*/
+        Member newMember = new Member(memberRegistryDTO.inss, memberRegistryDTO.eMail,memberRegistryDTO.firstName,memberRegistryDTO.lastName,memberRegistryDTO.streetName,memberRegistryDTO.houseNumber,memberRegistryDTO.postalCode,memberRegistryDTO.city);
+        memberRepository.addMember(newMember);
+        return new MemberDto(newMember);
+    }
 }

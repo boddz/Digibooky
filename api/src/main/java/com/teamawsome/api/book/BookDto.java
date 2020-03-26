@@ -18,6 +18,22 @@ public class BookDto {
             this.summary = summary;
         }
 
+    public Author getAuthor() {
+        return author;
+    }
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

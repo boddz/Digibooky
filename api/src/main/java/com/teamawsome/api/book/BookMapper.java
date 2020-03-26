@@ -10,5 +10,8 @@ public class BookMapper {
     public BookDto transformBookToBookDto(Book book){
         return new BookDto(book.getAuthor(), book.getISBN(), book.getTitle(), book.getSummary());
     }
+    public Book transformBookDtoToBook(BookDto bookDto){
+        return new Book(bookDto.getAuthor(), bookDto.getISBN(), bookDto.getTitle(), bookDto.getSummary());
+    }
 
 }
