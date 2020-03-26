@@ -56,10 +56,6 @@ public class Member {
         this.city = city;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
-
     public int getInss() {
         return inss;
     }
@@ -90,10 +86,6 @@ public class Member {
 
     public String getCity() {
         return city;
-    }
-
-    public int getCounter() {
-        return counter;
     }
 
     public int getId() {
