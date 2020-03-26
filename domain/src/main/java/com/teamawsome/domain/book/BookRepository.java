@@ -1,6 +1,7 @@
 package com.teamawsome.domain.book;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;

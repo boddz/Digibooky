@@ -3,6 +3,7 @@ package com.teamawsome.api.book;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,6 @@ public class BookController {
         return books.stream()
                 .map(book -> bookMapper.transformBookToBookDto(book))
                 .collect(Collectors.toList());
-
     }
 
 }
