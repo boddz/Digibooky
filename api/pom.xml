@@ -20,6 +20,10 @@
             <groupId>com.teamawsome</groupId>
             <artifactId>service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.teamawsome</groupId>
+            <artifactId>infrastructure</artifactId>
+        </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
