@@ -16,6 +16,10 @@
             <groupId>com.teamawsome</groupId>
             <artifactId>domain</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.teamawsome</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
 
     </dependencies>
 
