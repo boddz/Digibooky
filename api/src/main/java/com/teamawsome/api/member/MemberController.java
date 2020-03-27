@@ -29,7 +29,9 @@ public class MemberController {
         if (!memberRepository.isUniqueInss(memberRegistryDTO.getInss())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique inss");
         }
-
+        if(memberRegistryDTO.getLastName().isEmpty() || memberRegistryDTO.getCity().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"city and lastname must be inserted");
+        }
         Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
         memberRepository.addMember(newMember);
         return new MemberDto(newMember);
