@@ -22,6 +22,9 @@ public class MemberController {
     @PostMapping (consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO){
+        if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
+            throw new IllegalArgumentException("not uniqueEmail");
+        }
         Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
         memberRepository.addMember(newMember);
         return new MemberDto(newMember);

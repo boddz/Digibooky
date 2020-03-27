@@ -1,5 +1,9 @@
 package com.teamawsome.domain.member;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.stream.Collectors;
+
 public class Member {
     private final int id;
     private final String inss;
@@ -12,6 +16,7 @@ public class Member {
     private String city;
     private int counter = 100;
 
+
     public Member(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.id = counter;
         counter++;
@@ -23,12 +28,14 @@ public class Member {
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.city = city;
+
     }
 
-    private String checkIfValidEmail(String eMail) {
+    private String checkIfValidEmail(String email) {
         String regex = ".*\\@.*\\..*";
-        if (!eMail.matches(regex))
+        if (!email.matches(regex)) {
             throw new IllegalArgumentException("Wrong form of Email");
+        }
         return eMail;
     }
 
