@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public enum Feature {
     GET_ALL_BOOKS(BookstoreRole.ADMIN, BookstoreRole.MEMBER, BookstoreRole.LIBRARIAN);
 
