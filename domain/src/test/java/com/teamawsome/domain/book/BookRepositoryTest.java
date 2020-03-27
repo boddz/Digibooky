@@ -8,6 +8,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BookRepositoryTest {
+        private void fillWithUnimportantBook(BookRepository repository) {
+            Book one = new Book(
+                    new Author("Uresh", "Vahalia"),
+                    "0131019082",
+                    "UNIX Internals - The new frontiers",
+                    "This book examines recent advances in modern UNIX systems."
+            );
+
+            repository.addBook(one);
+        }
 
         @Test
         void getAllBooks_returnsListOfAllBooks() {
@@ -70,17 +80,83 @@ class BookRepositoryTest {
     @Test
     public void findByISBNWildCard_WithEmptyWildCardString_ReturnsEmptyList(){
         BookRepository repository = new BookRepository();
+        fillWithUnimportantBook(repository);
+
+        Assertions.assertThat(repository.findByISBNWildCard("")).hasSize(0);
+    }
+
+
+    @Test
+    public void findByAuthorName_withAllFieldsEmpty_ReturnsEmptyList(){
+        BookRepository repository = new BookRepository();
+
+        Author author = new Author("","");
+        fillWithUnimportantBook(repository);
+
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSize(0);
+    }
+
+    @Test
+    public void findByAuthorName_withFirstNameSet(){
+        BookRepository repository = new BookRepository();
+
+        Author author = new Author("U*h*","");
         Book one = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",
                 "UNIX Internals - The new frontiers",
                 "This book examines recent advances in modern UNIX systems."
         );
+        Book two = new Book(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution"
+        );
+        Book three = new Book(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices"
+        );
 
         repository.addBook(one);
+        repository.addBook(two);
+        repository.addBook(three);
 
-        Assertions.assertThat(repository.findByISBNWildCard("")).hasSize(0);
-
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSize(1);
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSameElementsAs(List.of(one));
     }
 
+    @Test
+    public void findByAuthorName_withLastNameSet(){
+        BookRepository repository = new BookRepository();
+
+        Author author = new Author("*","*h*");
+        Book one = new Book(
+                new Author("Uresh", "Vahalia"),
+                "0131019082",
+                "UNIX Internals - The new frontiers",
+                "This book examines recent advances in modern UNIX systems."
+        );
+        Book two = new Book(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution"
+        );
+        Book three = new Book(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices"
+        );
+
+        repository.addBook(one);
+        repository.addBook(two);
+        repository.addBook(three);
+
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSize(1);
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSameElementsAs(List.of(one, two, three));
+    }
 }

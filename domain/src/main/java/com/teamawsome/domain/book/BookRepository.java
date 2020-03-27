@@ -35,6 +35,9 @@ public class BookRepository {
                 .filter(book -> book.getISBN().matches(constructRegExFromWildCard(wildcard)))
                 .collect(Collectors.toUnmodifiableList());
     }
+    public List<Book> findByAuthorName(Author wildcard){
+        return null;
+    }
 
     String constructRegExFromWildCard(String input){
         return input.replace("*",".*").replace("?",".?");

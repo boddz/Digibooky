@@ -44,8 +44,8 @@ public class BookController {
         }
     }
 
-    @GetMapping(produces = "application/json;charset=UTF-8", path = "/isbn")
-    public List<BookDto> searchByWildCardISBN(@RequestParam("wildcard") String wildCard) {
+    @GetMapping(produces = "application/json;charset=UTF-8",params = {"withIsbn"})
+    public List<BookDto> searchByWildCardISBN(@RequestParam("withIsbn") String wildCard) {
         return bookRepository.findByISBNWildCard(wildCard).stream()
                 .map(bookMapper::transformBookToBookDto)
                 .collect(Collectors.toUnmodifiableList());

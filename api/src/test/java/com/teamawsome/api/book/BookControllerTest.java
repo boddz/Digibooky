@@ -94,8 +94,8 @@ class BookControllerTest {
         ));
 
         Mockito.when(bookRepository.findByISBNWildCard("013*82")).thenReturn(returnedBooks);
-        String actual = mockMvc.perform(get("/books/isbn")
-                                        .queryParam("wildcard","013*82")
+        String actual = mockMvc.perform(get("/books")
+                                        .queryParam("withIsbn","013*82")
                                         .with(user("user")
                                                 .password("password")
                                                 .roles("Admin")) )
@@ -105,5 +105,89 @@ class BookControllerTest {
                 .getContentAsString();
 
         JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
+    }
+
+    @Test
+    public void findBookByAuthorName() throws Exception{
+
+        Book lowLevel = new Book(
+                        new Author("Igor","Zhirkov"),
+                        "9781484224021",
+                        "Low-level Programming",
+                        "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution" );
+        Book effective = new Book(
+                        new Author("Joshua", "Bloch"),
+                        "9780134685991",
+                        "Effective Java",
+                        "The definitive guide to Java Platform best practices" );
+        List<Book> returnedBooks =List.of(lowLevel, effective);
+
+        BookDto dtoLowLevel = new BookDto(
+                        new Author("Igor","Zhirkov"),
+                        "9781484224021",
+                        "Low-level Programming",
+                        "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution" );
+        BookDto dtoEffective = new BookDto(
+                        new Author("Joshua", "Bloch"),
+                        "9780134685991",
+                        "Effective Java",
+                        "The definitive guide to Java Platform best practices" );
+        String expectedAll = objectToJSON(List.of(dtoLowLevel, dtoEffective));
+        String expectedLowlevel = objectToJSON(List.of(dtoLowLevel));
+        String expectedEffective = objectToJSON(List.of(dtoEffective));
+        String expectedEmptyList = objectToJSON(List.<BookDto>of());
+
+        Mockito.when(bookRepository.findByAuthorName(new Author("","*o*"))).thenReturn(returnedBooks);
+        Mockito.when(bookRepository.findByAuthorName(new Author("Jos*","*o*"))).thenReturn(List.of(effective));
+        Mockito.when(bookRepository.findByAuthorName(new Author("?gor",""))).thenReturn(List.of(lowLevel));
+        Mockito.when(bookRepository.findByAuthorName(new Author("",""))).thenReturn(List.<Book>of());
+
+        String actual = mockMvc.perform(get("/books")
+                .queryParam("withAuthor","{\"firstName\":null, \"lastName\":\"*o*\"}")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedAll, actual, JSONCompareMode.STRICT);
+
+        actual = mockMvc.perform(get("/books")
+                .queryParam("withAuthor","{\"firstName\":\"?gor\", \"lastName\":null}")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
+
+        actual = mockMvc.perform(get("/books")
+                .queryParam("withAuthor","{\"firstName\":\"Jos*\", \"lastName\":\"*o*\"}")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
+
+        actual = mockMvc.perform(get("/books")
+                .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedEmptyList, actual, JSONCompareMode.STRICT);
     }
 }
