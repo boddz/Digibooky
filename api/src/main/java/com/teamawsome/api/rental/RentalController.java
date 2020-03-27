@@ -46,7 +46,6 @@ public class RentalController {
     /*
     Exception handlers
      */
-
     @ExceptionHandler(BookNotPresentException.class)
     protected void bookNotPresentException(BookNotPresentException e, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

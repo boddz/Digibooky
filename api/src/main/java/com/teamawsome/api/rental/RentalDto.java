@@ -19,4 +19,16 @@ public class RentalDto {
     public String getIsbn() {
         return isbn;
     }
+
+    public int getRentalId() {
+        return rentalId;
+    }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
 }

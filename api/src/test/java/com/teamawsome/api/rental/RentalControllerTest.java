@@ -9,7 +9,6 @@ import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.rental.BookRentedOutException;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.server.ResponseStatusException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,7 +45,6 @@ class RentalControllerTest {
         assertThat(actualRentalDto.getIsbn()).isEqualTo("123456");
     }
 
-
     @Test
     void rentBook_ifGivenBookExistsButIsNotAvailable_throwExceptionWithSuitableMessage() {
         //given
@@ -78,6 +76,5 @@ class RentalControllerTest {
         //then
         assertThatThrownBy(() -> rentalController.rentBook(bookToBeRentedDto)).isInstanceOf(IllegalArgumentException.class);
     }
-
 
 }
