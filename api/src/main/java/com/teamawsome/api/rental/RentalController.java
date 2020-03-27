@@ -15,15 +15,13 @@ public class RentalController {
     }
 
     public RentalDto rentBook(RentBookDto rentBookDto) {
-        Book bookToBeRented;
+
         try {
-            bookToBeRented = bookRepository.getBook(rentBookDto.getIsbn());
+            bookRepository.getBook(rentBookDto.getIsbn());
         } catch (BookNotPresentException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        RentalDto rentalDto = new RentalDto(1,1, "123456");
-
-        return rentalDto;
+        return new RentalDto(1,1, rentBookDto.getIsbn());
     }
 }
