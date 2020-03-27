@@ -6,6 +6,7 @@ import com.teamawsome.service.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(path = "/members")
@@ -23,10 +24,24 @@ public class MemberController {
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO){
         if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
-            throw new IllegalArgumentException("not uniqueEmail");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique Email");
         }
+        if (!memberRepository.isUniqueInss(memberRegistryDTO.getInss())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique inss");
+        }
+
         Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
         memberRepository.addMember(newMember);
         return new MemberDto(newMember);
     }
+
+ /*   public boolean checkBodyRequierements(MemberRegistryDTO memberRegistryDTO){
+        checkIfMailIsUnique(memberRegistryDTO);
+    }
+
+    private boolean checkIfMailIsUnique(MemberRegistryDTO memberRegistryDTO) {
+        if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
+            throw new IllegalArgumentException("not uniqueEmail");
+        }return true;
+    }*/
 }

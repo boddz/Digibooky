@@ -28,6 +28,15 @@ public class MemberRepository {
                 .collect(Collectors.toList()).isEmpty();
     }
 
+    public boolean isUniqueInss(String inss) {
+        if (memberList.isEmpty()) {
+            return true;
+        }
+        return memberList.stream()
+                .map(Member::getInss)
+                .filter(x -> x.equals(inss))
+                .collect(Collectors.toList()).isEmpty();
+    }
     public Member getMemberById(int memberId) {
         for (Member member : memberList){
             if(member.getId()== memberId){

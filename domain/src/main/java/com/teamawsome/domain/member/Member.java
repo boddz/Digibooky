@@ -14,12 +14,11 @@ public class Member {
     private int houseNumber;
     private int postalCode;
     private String city;
-    private int counter = 100;
+    private static int counter = 100;
 
 
     public Member(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
-        this.id = counter;
-        counter++;
+        this.id = counter++;
         this.inss = checkIfValidInss(inss);
         this.eMail = checkIfValidEmail(eMail);
         this.firstName = firstName;
@@ -36,12 +35,15 @@ public class Member {
         if (!email.matches(regex)) {
             throw new IllegalArgumentException("Wrong form of Email");
         }
-        return eMail;
+        return email;
     }
 
     private String checkIfValidInss(String inss) {
         String regex = "^[0-9][0-9](1[0-2]||0[0-9])(3[01]||[012][0-9])[0-9]{5}$";
-        if (inss.matches(regex) && checkInssControlNumber(inss)) {
+       /* if (inss.matches(regex) && checkInssControlNumber(inss)) {
+            return inss;
+        }*/
+        if (inss.matches(regex)) {
             return inss;
         }
         throw new IllegalArgumentException("This is not a valid inss number.");
