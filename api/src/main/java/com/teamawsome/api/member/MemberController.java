@@ -31,24 +31,39 @@ public class MemberController {
     }
 
     @PostMapping (path = "{user}",  consumes = "application/json", produces = "application/json")
-//    @PreAuthorize("hasAuthority('MAKE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewUser(@RequestBody MemberRegistryDTO memberRegistryDTO, @PathVariable String user){
         checkIfValidInput(memberRegistryDTO);
         Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
         memberRepository.addMember(newMember);
-        if  (user.equals("member")) {
-            fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), "member", List.of(BookstoreRole.MEMBER));
+        switch (user) {
+            case "member":
+                addUserToAuthenticationService(memberRegistryDTO, "member", BookstoreRole.MEMBER);
+                break;
+            case "admin":
+                addAdminToAuthenticationService(memberRegistryDTO);
+                break;
+            case "librarian":
+                addLibrarianToAuthenticationService(memberRegistryDTO);
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "use: admin or librarian or member as pathvariable");
         }
-        else if (user.equals("admin")) {
-            fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), "admin", List.of(BookstoreRole.ADMIN));
-        }
-        else if (user.equals("librarian")) {
-            fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), "librarian", List.of(BookstoreRole.LIBRARIAN));
-        } else { throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"use: admin or librarian or member as pathvariable");}
         return new MemberDto(newMember);
     }
 
+    private void addUserToAuthenticationService( MemberRegistryDTO memberRegistryDTO, String pasword, BookstoreRole bookstoreRoles) {
+        fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), pasword, List.of(bookstoreRoles));
+    }
+
+    @PreAuthorize("hasAuthority('MAKE_ADMIN')")
+    private void addAdminToAuthenticationService( MemberRegistryDTO memberRegistryDTO) {
+        addUserToAuthenticationService(memberRegistryDTO, "admin", BookstoreRole.ADMIN);
+    }
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
+    private void addLibrarianToAuthenticationService( MemberRegistryDTO memberRegistryDTO) {
+        addUserToAuthenticationService(memberRegistryDTO, "librarian", BookstoreRole.LIBRARIAN);
+    }
 
 
     private void checkIfValidInput(@RequestBody MemberRegistryDTO memberRegistryDTO) {

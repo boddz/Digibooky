@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 
 public enum Feature {
     GET_ALL_BOOKS(BookstoreRole.ADMIN, BookstoreRole.MEMBER, BookstoreRole.LIBRARIAN),
-    MAKE_ADMIN(BookstoreRole.ADMIN);
+    MAKE_ADMIN(BookstoreRole.ADMIN),
+    MAKE_LIBRARIAN(BookstoreRole.LIBRARIAN);
+
 
 
     private BookstoreRole[] roles;
