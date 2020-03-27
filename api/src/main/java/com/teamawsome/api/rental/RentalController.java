@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 
 
 @RestController
@@ -41,7 +42,18 @@ public class RentalController {
         Rental newRental = rentalRepository.add(member, book);
         return new RentalDto(newRental.getRentalId(), newRental.getMember().getId(), rentBookDto.getIsbn(), newRental.getReturnDate());
     }
-
+    @GetMapping(produces = "application/json", path="/return/{rentalId}")
+    public ReturnedDto returnBook(@PathVariable int rentalId){
+        Rental returnedRental=rentalRepository.returnRentedBook(rentalId);
+        String lateMessage;
+        if(returnedRental.getReturnDate().compareTo(LocalDate.now())<0){
+            lateMessage="You are late!";
+        }
+        else{
+            lateMessage="You're on time!";
+        }
+        return new ReturnedDto(returnedRental.getRentalId(), returnedRental.getMember().getId(), returnedRental.getBook().getISBN(), lateMessage);
+    }
 
     /*
     Exception handlers
@@ -60,4 +72,6 @@ public class RentalController {
     protected void illegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
+
+
 }

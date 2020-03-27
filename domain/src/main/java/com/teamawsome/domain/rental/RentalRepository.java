@@ -35,4 +35,13 @@ public class RentalRepository {
         rentalList.add(newRental);
         return newRental;
     }
+
+    public Rental returnRentedBook(int rentalId){
+        for (int i=0;i<rentalList.size();i++) {
+            if(rentalList.get(i).getRentalId()==rentalId){
+                return rentalList.remove(i);
+            }
+        }
+        throw new RentalNotFoundException();
+    }
 }
