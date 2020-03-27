@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MemberRepository {
@@ -15,9 +16,17 @@ public class MemberRepository {
 
     public void addMember(Member member) {
         memberList.add(member);
-
     }
 
+    public boolean isUniqueEmail(String email) {
+        if (memberList.isEmpty()) {
+            return true;
+        }
+        return memberList.stream()
+                .map(Member::geteMail)
+                .filter(x -> x.equals(email))
+                .collect(Collectors.toList()).isEmpty();
+    }
 
 }
 

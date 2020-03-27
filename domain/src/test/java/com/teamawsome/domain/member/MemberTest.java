@@ -56,4 +56,13 @@ class MemberTest {
                 .hasMessage("This is not a valid inss number.");
     }
 
+    @Test
+    void EmailIsUnique() {
+        MemberRepository memberRepository = new MemberRepository();
+        memberRepository.addMember(new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
+//        Assertions.assertThatThrownBy(() -> new Member("06022308177", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"))
+//                .isInstanceOf(IllegalArgumentException.class);
+//        assertEquals(1, memberRepository.getAllMembers().size());
+
+    }
 }
