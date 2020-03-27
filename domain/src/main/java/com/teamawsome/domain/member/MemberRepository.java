@@ -17,5 +17,7 @@ public class MemberRepository {
         memberList.add(member);
 
     }
+
+
 }
 
