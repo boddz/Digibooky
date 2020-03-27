@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class BookRepository {
@@ -27,5 +28,15 @@ public class BookRepository {
                 .filter(book -> book.getISBN().equals(ISBN))
                 .findFirst()
                 .orElseThrow(BookNotPresentException::new);
+    }
+
+    public List<Book> findByISBNWildCard(String wildcard){
+        return bookList.stream()
+                .filter(book -> book.getISBN().matches(constructRegExFromWildCard(wildcard)))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    String constructRegExFromWildCard(String input){
+        return input.replace("*",".*").replace("?",".?");
     }
 }

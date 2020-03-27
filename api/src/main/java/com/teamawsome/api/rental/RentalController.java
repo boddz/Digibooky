@@ -34,10 +34,10 @@ public class RentalController {
     @PostMapping(produces = "application/json", consumes = "application/json")
     public RentalDto rentBook(@RequestBody RentBookDto rentBookDto) {
         Book book;
-            book = bookRepository.getBook(rentBookDto.getIsbn());
-            rentalRepository.isAvailable(book);
+        book = bookRepository.getBook(rentBookDto.getIsbn());
+        rentalRepository.isAvailable(book);
         Member member;
-            member = memberRepository.getMemberById(rentBookDto.getMemberId());
+        member = memberRepository.getMemberById(rentBookDto.getMemberId());
         Rental newRental = rentalRepository.add(member, book);
         return new RentalDto(newRental.getRentalId(), newRental.getMember().getId(), rentBookDto.getIsbn(), newRental.getReturnDate());
     }

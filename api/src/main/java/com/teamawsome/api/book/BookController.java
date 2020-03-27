@@ -5,11 +5,9 @@ import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-//import java.awt.print.Book;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +43,15 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Go away, no book today!", exception);
         }
     }
+
+    @GetMapping(produces = "application/json;charset=UTF-8", path = "/isbn")
+    public List<BookDto> searchByWildCardISBN(@RequestParam("wildcard") String wildCard) {
+        return bookRepository.findByISBNWildCard(wildCard).stream()
+                .map(bookMapper::transformBookToBookDto)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public BookDto addBook(@RequestBody BookDto bookDto) {

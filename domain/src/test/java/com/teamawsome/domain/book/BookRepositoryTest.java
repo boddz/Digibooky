@@ -27,4 +27,60 @@ class BookRepositoryTest {
             Assertions.assertThat(listOfBook).containsExactlyInAnyOrder(book1, book2);
     }
 
+    @Test
+    public void transformWildCardSearchStringToRegExp(){
+            BookRepository repository = new BookRepository();
+            String expected = "A.?.*";
+            String input = "A?*";
+
+            Assertions.assertThat(repository.constructRegExFromWildCard(input)).isEqualTo(expected);
+    }
+
+    @Test
+    public void findBooksByISBNWildCard(){
+        BookRepository repository = new BookRepository();
+        Book one = new Book(
+                new Author("Uresh", "Vahalia"),
+                "0131019082",
+                "UNIX Internals - The new frontiers",
+                "This book examines recent advances in modern UNIX systems."
+        );
+        Book two = new Book(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution"
+        );
+        Book three = new Book(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices"
+        );
+
+        repository.addBook(one);
+        repository.addBook(two);
+        repository.addBook(three);
+        List<Book> expected = List.of(two, three);
+        List<Book> actual = repository.findByISBNWildCard("978*");
+
+        Assertions.assertThat(actual).hasSameElementsAs(expected);
+    }
+
+    @Test
+    public void findByISBNWildCard_WithEmptyWildCardString_ReturnsEmptyList(){
+        BookRepository repository = new BookRepository();
+        Book one = new Book(
+                new Author("Uresh", "Vahalia"),
+                "0131019082",
+                "UNIX Internals - The new frontiers",
+                "This book examines recent advances in modern UNIX systems."
+        );
+
+        repository.addBook(one);
+
+        Assertions.assertThat(repository.findByISBNWildCard("")).hasSize(0);
+
+    }
+
 }
