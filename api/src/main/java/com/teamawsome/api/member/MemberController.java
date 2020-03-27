@@ -23,6 +23,13 @@ public class MemberController {
     @PostMapping (consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO){
+        checkIfValidInput(memberRegistryDTO);
+        Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
+        memberRepository.addMember(newMember);
+        return new MemberDto(newMember);
+    }
+
+    private void checkIfValidInput(@RequestBody MemberRegistryDTO memberRegistryDTO) {
         if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique Email");
         }
@@ -32,18 +39,7 @@ public class MemberController {
         if(memberRegistryDTO.getLastName().isEmpty() || memberRegistryDTO.getCity().isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"city and lastname must be inserted");
         }
-        Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
-        memberRepository.addMember(newMember);
-        return new MemberDto(newMember);
     }
 
- /*   public boolean checkBodyRequierements(MemberRegistryDTO memberRegistryDTO){
-        checkIfMailIsUnique(memberRegistryDTO);
-    }
 
-    private boolean checkIfMailIsUnique(MemberRegistryDTO memberRegistryDTO) {
-        if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
-            throw new IllegalArgumentException("not uniqueEmail");
-        }return true;
-    }*/
 }
