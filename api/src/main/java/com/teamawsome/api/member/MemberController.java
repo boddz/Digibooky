@@ -29,4 +29,14 @@ public class MemberController {
         memberRepository.addMember(newMember);
         return new MemberDto(newMember);
     }
+
+ /*   public boolean checkBodyRequierements(MemberRegistryDTO memberRegistryDTO){
+        checkIfMailIsUnique(memberRegistryDTO);
+    }
+
+    private boolean checkIfMailIsUnique(MemberRegistryDTO memberRegistryDTO) {
+        if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
+            throw new IllegalArgumentException("not uniqueEmail");
+        }return true;
+    }*/
 }

@@ -41,7 +41,10 @@ public class Member {
 
     private String checkIfValidInss(String inss) {
         String regex = "^[0-9][0-9](1[0-2]||0[0-9])(3[01]||[012][0-9])[0-9]{5}$";
-        if (inss.matches(regex) && checkInssControlNumber(inss)) {
+       /* if (inss.matches(regex) && checkInssControlNumber(inss)) {
+            return inss;
+        }*/
+        if (inss.matches(regex)) {
             return inss;
         }
         throw new IllegalArgumentException("This is not a valid inss number.");
