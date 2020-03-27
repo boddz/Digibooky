@@ -26,7 +26,7 @@ public class Member {
     }
 
     private String checkIfValidEmail(String eMail) {
-        String regex = "(.*)(\\@)(.*)(\\.)(.*)";
+        String regex = ".*\\@.*\\..*";
         if (!eMail.matches(regex))
             throw new IllegalArgumentException("Wrong form of Email");
         return eMail;
