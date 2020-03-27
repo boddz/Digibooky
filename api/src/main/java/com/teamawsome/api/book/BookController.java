@@ -47,7 +47,6 @@ public class BookController {
         } catch (BookNotPresentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Go away, no book today!", exception);
         }
-
     }
 
 
