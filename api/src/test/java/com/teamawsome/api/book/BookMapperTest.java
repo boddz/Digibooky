@@ -1,4 +1,4 @@
-package com.teamawsome.api;
+package com.teamawsome.api.book;
 
 import com.teamawsome.api.book.BookDto;
 import com.teamawsome.api.book.BookMapper;
