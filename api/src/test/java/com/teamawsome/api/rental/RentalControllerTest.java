@@ -2,9 +2,11 @@ package com.teamawsome.api.rental;
 
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
+import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
+import com.teamawsome.domain.rental.BookRentedOutException;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +23,7 @@ class RentalControllerTest {
         RentBookDto rentBookDto = new RentBookDto("whatever", 1);
         //when
         //then
-        assertThatThrownBy(() -> rentalController.rentBook(rentBookDto)).isInstanceOf(ResponseStatusException.class);
+        assertThatThrownBy(() -> rentalController.rentBook(rentBookDto)).isInstanceOf(BookNotPresentException.class);
     }
 
     @Test
@@ -60,7 +62,7 @@ class RentalControllerTest {
         rentalController.rentBook(bookToBeRentedDto);
 
         //then
-        assertThatThrownBy(() -> rentalController.rentBook(bookToBeRentedDto)).isInstanceOf(ResponseStatusException.class);
+        assertThatThrownBy(() -> rentalController.rentBook(bookToBeRentedDto)).isInstanceOf(BookRentedOutException.class);
     }
 
     @Test
@@ -74,7 +76,7 @@ class RentalControllerTest {
         RentBookDto bookToBeRentedDto = new RentBookDto("123456", 1);
 
         //then
-        assertThatThrownBy(() -> rentalController.rentBook(bookToBeRentedDto)).isInstanceOf(ResponseStatusException.class);
+        assertThatThrownBy(() -> rentalController.rentBook(bookToBeRentedDto)).isInstanceOf(IllegalArgumentException.class);
     }
 
 
