@@ -27,12 +27,48 @@ public class MemberDto {
         this.city = member.getCity();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getInss() {
+        return inss;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public int getHouseNumber() {
+        return houseNumber;
+    }
+
+    public int getPostalCode() {
+        return postalCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MemberDto memberDto = (MemberDto) o;
-        return id == memberDto.id &&
+        return
                 Objects.equals(inss, memberDto.inss) &&
                 houseNumber == memberDto.houseNumber &&
                 postalCode == memberDto.postalCode &&
