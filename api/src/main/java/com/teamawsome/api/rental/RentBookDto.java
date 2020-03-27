@@ -3,9 +3,9 @@ package com.teamawsome.api.rental;
 public class RentBookDto {
 
     private String isbn;
-    private String memberId;
+    private int memberId;
 
-    public RentBookDto(String isbn, String memberId) {
+    public RentBookDto(String isbn, int memberId) {
         this.isbn = isbn;
         this.memberId = memberId;
     }
@@ -14,7 +14,7 @@ public class RentBookDto {
         return isbn;
     }
 
-    public String getMemberId() {
+    public int getMemberId() {
         return memberId;
     }
 }
