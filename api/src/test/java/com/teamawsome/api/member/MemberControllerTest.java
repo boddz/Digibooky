@@ -58,6 +58,20 @@ class MemberControllerTest {
 
     }
 
+    @Test
+    void whenRegisteringNewMember_ifLastNameIsNotGiven_throwException(){
+        MemberController memberController = new MemberController(new MemberRepository(),new MemberMapper());
+        MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "", "straat", 5, 9000, "Gent");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewMember(member1));
+    }
+
+    @Test
+    void whenRegisteringNewMember_ifCityIsNotGiven_throwException(){
+        MemberController memberController = new MemberController(new MemberRepository(),new MemberMapper());
+        MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "d", "straat", 5, 9000, "");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewMember(member1));
+    }
+
 
 
 }
