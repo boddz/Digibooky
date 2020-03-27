@@ -2,11 +2,17 @@ package com.teamawsome.api.member;
 
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
+import com.teamawsome.infrastructure.authentication.external.ExternalAuthentication;
+import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
+import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import com.teamawsome.service.MemberMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +20,8 @@ class MemberControllerTest {
     @Test
     void addNewMember_memberIsAddedToRepository() {
         MemberRepository memberRepository = new MemberRepository();
-        MemberController memberController = new MemberController(memberRepository, new MemberMapper());
-        MemberDto actual = memberController.registerNewMember(new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
+        MemberController memberController = new MemberController(memberRepository, new MemberMapper(), new FakeAuthenticationService(new ArrayList<>()));
+        MemberDto actual = memberController.registerNewUser( new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"), "member");
         MemberDto expected = new MemberDto(new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
         assertEquals(1, memberRepository.getAllMembers().size());
         assertEquals(expected, actual);
@@ -27,9 +33,9 @@ class MemberControllerTest {
         MemberRepository memberRepository = new MemberRepository();
         MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
         MemberRegistryDTO member2 = new MemberRegistryDTO("93051822361", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
-       MemberController memberController = new MemberController(memberRepository,new MemberMapper());
-       memberController.registerNewMember(member1);
-        Assertions.assertThatThrownBy(() -> memberController.registerNewMember(member2));
+       MemberController memberController = new MemberController(memberRepository,new MemberMapper(), new FakeAuthenticationService(new ArrayList<>()));
+       memberController.registerNewUser(member1, "member");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewUser(member2, "member"));
 
         assertEquals(1, memberRepository.getAllMembers().size());
 
@@ -50,14 +56,56 @@ class MemberControllerTest {
         MemberRepository memberRepository = new MemberRepository();
         MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
         MemberRegistryDTO member2 = new MemberRegistryDTO("00000000097", "to@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
-        MemberController memberController = new MemberController(memberRepository,new MemberMapper());
-        memberController.registerNewMember(member1);
-        Assertions.assertThatThrownBy(() -> memberController.registerNewMember(member2));
+        MemberController memberController = new MemberController(memberRepository,new MemberMapper() , new FakeAuthenticationService(new ArrayList<>()));
+        memberController.registerNewUser(member1, "member");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewUser(member2, "member"));
 
         assertEquals(1, memberRepository.getAllMembers().size());
 
     }
 
+    @Test
+    void whenRegisteringNewMember_ifLastNameIsNotGiven_throwException(){
+        MemberController memberController = new MemberController(new MemberRepository(),new MemberMapper(), new FakeAuthenticationService(new ArrayList<>()));
+        MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "", "straat", 5, 9000, "Gent");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewUser(member1, "member"));
+    }
 
+    @Test
+    void whenRegisteringNewMember_ifCityIsNotGiven_throwException(){
+        MemberController memberController = new MemberController(new MemberRepository(),new MemberMapper(), new FakeAuthenticationService(new ArrayList<>()));
+        MemberRegistryDTO member1 = new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "d", "straat", 5, 9000, "");
+        Assertions.assertThatThrownBy(() -> memberController.registerNewUser(member1, "member"));
+    }
+
+
+    @Test
+    void addNewAdmin_memberIsAddedToRepository() {
+
+        MemberRepository memberRepository = new MemberRepository();
+        FakeAuthenticationService fakeAuthenticationService1 = new FakeAuthenticationService(new ArrayList<>());
+        MemberController memberController = new MemberController(memberRepository, new MemberMapper(), fakeAuthenticationService1);
+        memberController.registerNewUser( new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"), "admin");
+        assertEquals(fakeAuthenticationService1.getUser("tom", "admin"), ExternalAuthentication.externalAuthentication().withUsername("tom").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
+    }
+
+    @Test
+    void addNewLibrarian_memberIsAddedToRepository() {
+        MemberRepository memberRepository = new MemberRepository();
+        FakeAuthenticationService fakeAuthenticationService1 = new FakeAuthenticationService(new ArrayList<>());
+        MemberController memberController = new MemberController(memberRepository, new MemberMapper(), fakeAuthenticationService1);
+        memberController.registerNewUser( new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"), "librarian");
+        assertEquals(fakeAuthenticationService1.getUser("tom", "librarian"), ExternalAuthentication.externalAuthentication().withUsername("tom").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
+
+    }
+
+    @Test
+    void addWrongPathvariable() {
+        MemberRepository memberRepository = new MemberRepository();
+        FakeAuthenticationService fakeAuthenticationService1 = new FakeAuthenticationService(new ArrayList<>());
+        MemberController memberController = new MemberController(memberRepository, new MemberMapper(), fakeAuthenticationService1);
+     Assertions.assertThatThrownBy(()-> memberController.registerNewUser( new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"), "onzin"));
+
+    }
 
 }

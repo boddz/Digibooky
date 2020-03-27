@@ -2,14 +2,18 @@ package com.teamawsome.domain.rental;
 
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.member.Member;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class RentalRepository {
 
     List<Rental> rentalList;
 
+    @Autowired
     public RentalRepository() {
         this.rentalList = new ArrayList<>();
     }

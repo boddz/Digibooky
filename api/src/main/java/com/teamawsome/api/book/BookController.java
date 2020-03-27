@@ -5,7 +5,6 @@ import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,7 +34,7 @@ public class BookController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(produces = "application/json", consumes = "application/json", path = "{ISBN}")
+    @GetMapping(produces = "application/json", consumes = "application/json", path = "/{ISBN}")
     public BookDto getDetailsOfBook(@PathVariable String ISBN) {
         try {
             Book askedBook = bookRepository.getBook(ISBN);
@@ -54,4 +53,9 @@ public class BookController {
 
 
 
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public BookDto addBook(@RequestBody BookDto bookDto) {
+        bookRepository.addBook(bookMapper.transformBookDtoToBook(bookDto));
+        return bookDto;
+    }
 }

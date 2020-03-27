@@ -10,7 +10,10 @@ import java.util.stream.Collectors;
 
 
 public enum Feature {
-    GET_ALL_BOOKS(BookstoreRole.ADMIN, BookstoreRole.MEMBER, BookstoreRole.LIBRARIAN);
+    GET_ALL_BOOKS(BookstoreRole.ADMIN, BookstoreRole.MEMBER, BookstoreRole.LIBRARIAN),
+    MAKE_ADMIN(BookstoreRole.ADMIN),
+    MAKE_LIBRARIAN(BookstoreRole.LIBRARIAN);
+
 
 
     private BookstoreRole[] roles;
@@ -23,10 +26,7 @@ public enum Feature {
         return Arrays.asList(roles);
     }
 
-    public static List<Feature> getFeaturesForRoles(List<String> rolesOfUserAsString){
-        List<BookstoreRole> rolesOfUser = rolesOfUserAsString.stream()
-                .map(BookstoreRole::valueOf)
-                .collect(Collectors.toList());
+    public static List<Feature> getFeaturesForRoles(List<BookstoreRole> rolesOfUser){
 
         List<Feature> listOfAllFeatures = Arrays.asList(Feature.values());
         List<Feature> allowedFeatures = new ArrayList<>();
