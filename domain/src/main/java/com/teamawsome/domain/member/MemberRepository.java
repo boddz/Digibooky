@@ -37,5 +37,13 @@ public class MemberRepository {
                 .filter(x -> x.equals(inss))
                 .collect(Collectors.toList()).isEmpty();
     }
+    public Member getMemberById(int memberId) {
+        for (Member member : memberList){
+            if(member.getId()== memberId){
+                return member;
+            }
+        }
+        throw new IllegalArgumentException("Member does not exist");
+    }
 }
 

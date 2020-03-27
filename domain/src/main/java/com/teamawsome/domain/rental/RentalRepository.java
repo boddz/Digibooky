@@ -16,9 +16,9 @@ public class RentalRepository {
 
 
     public boolean isAvailable(Book book) {
-        for (Rental rental : rentalList){
-                if (rental.getBook().equals(book)){
-                    throw new BookRentedOutException();
+        for (Rental rental : rentalList) {
+            if (rental.getBook().equals(book)) {
+                throw new BookRentedOutException();
 
             }
         }
@@ -26,7 +26,9 @@ public class RentalRepository {
     }
 
 
-    public void add(String MemberId, Book book) {
-        rentalList.add(new Rental(book));
+    public Rental add(Member member, Book book) {
+        Rental newRental = new Rental(member, book);
+        rentalList.add(newRental);
+        return newRental;
     }
 }
