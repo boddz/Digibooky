@@ -3,6 +3,7 @@ package com.teamawsome.api.member;
 import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
+import com.teamawsome.domain.member.NotUniqueException;
 import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import com.teamawsome.service.MemberMapper;
@@ -30,11 +31,11 @@ public class MemberController {
         this.fakeAuthenticationService = fakeAuthenticationService;
     }
 
-    @PostMapping (path = "{user}",  consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "{user}", consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberDto registerNewUser(@RequestBody MemberRegistryDTO memberRegistryDTO, @PathVariable String user){
+    public MemberDto registerNewUser(@RequestBody MemberRegistryDTO memberRegistryDTO, @PathVariable String user) {
         checkIfValidInput(memberRegistryDTO);
-        Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(),memberRegistryDTO.getFirstName(),memberRegistryDTO.getLastName(),memberRegistryDTO.getStreetName(),memberRegistryDTO.getHouseNumber(),memberRegistryDTO.getPostalCode(),memberRegistryDTO.getCity());
+        Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(), memberRegistryDTO.getFirstName(), memberRegistryDTO.getLastName(), memberRegistryDTO.getStreetName(), memberRegistryDTO.getHouseNumber(), memberRegistryDTO.getPostalCode(), memberRegistryDTO.getCity());
         memberRepository.addMember(newMember);
         switch (user) {
             case "member":
@@ -52,32 +53,35 @@ public class MemberController {
         return new MemberDto(newMember);
     }
 
-    private void addUserToAuthenticationService( MemberRegistryDTO memberRegistryDTO, String pasword, BookstoreRole bookstoreRoles) {
+    private void addUserToAuthenticationService(MemberRegistryDTO memberRegistryDTO, String pasword, BookstoreRole bookstoreRoles) {
         fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), pasword, List.of(bookstoreRoles));
     }
 
     @PreAuthorize("hasAuthority('MAKE_ADMIN')")
-    private void addAdminToAuthenticationService( MemberRegistryDTO memberRegistryDTO) {
+    private void addAdminToAuthenticationService(MemberRegistryDTO memberRegistryDTO) {
         addUserToAuthenticationService(memberRegistryDTO, "admin", BookstoreRole.ADMIN);
     }
+
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
-    private void addLibrarianToAuthenticationService( MemberRegistryDTO memberRegistryDTO) {
+    private void addLibrarianToAuthenticationService(MemberRegistryDTO memberRegistryDTO) {
         addUserToAuthenticationService(memberRegistryDTO, "librarian", BookstoreRole.LIBRARIAN);
     }
 
 
-    private void checkIfValidInput(@RequestBody MemberRegistryDTO memberRegistryDTO) {
-        if (!memberRepository.isUniqueEmail(memberRegistryDTO.geteMail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique Email");
-        }
-        if (!memberRepository.isUniqueInss(memberRegistryDTO.getInss())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not unique inss");
-        }
-        if(memberRegistryDTO.getLastName().isEmpty() || memberRegistryDTO.getCity().isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"city and lastname must be inserted");
+    private void checkIfValidInput(MemberRegistryDTO memberRegistryDTO) {
+        memberRepository.isUniqueEmail(memberRegistryDTO.geteMail());
+        memberRepository.isUniqueInss(memberRegistryDTO.getInss());
+        if (memberRegistryDTO.getLastName().isEmpty() || memberRegistryDTO.getCity().isEmpty()) {
+            throw new IllegalArgumentException("city and lastname must be inserted");
         }
     }
 
-
-
+    @ExceptionHandler(NotUniqueException.class)
+    protected void notUniqueException(NotUniqueException e, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected void illegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
 }
