@@ -1,5 +1,8 @@
 package com.teamawsome.infrastructure.authentication.external;
 
+import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +12,10 @@ public class FakeAuthenticationService {
 
     private final List<ExternalAuthentication> externalAuthentications;
 
+    @Autowired
     public FakeAuthenticationService(List<ExternalAuthentication> externalAuthentications) {
         this.externalAuthentications = externalAuthentications;
-        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("user").withPassword("password").withRoles(List.of("fakeRole")));
+//        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("user").withPassword("password").withRoles(List.of(BookstoreRole.MEMBER)));
     }
 
     public ExternalAuthentication getUser(String username, String password) {
@@ -22,7 +26,7 @@ public class FakeAuthenticationService {
                 .orElse(null);
     }
 
-    public void addMember(String name, String password, List<String> roles){
+    public void addMember(String name, String password, List<BookstoreRole> roles){
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername(name).withPassword(password).withRoles(roles));
     }
 }
