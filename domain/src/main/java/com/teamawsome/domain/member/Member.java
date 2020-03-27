@@ -2,7 +2,7 @@ package com.teamawsome.domain.member;
 
 public class Member {
     private final int id;
-    private final int inss;
+    private final String inss;
     private String eMail;
     private final String firstName;
     private final String lastName;
@@ -12,7 +12,7 @@ public class Member {
     private String city;
     private int counter = 100;
 
-    public Member(int inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
+    public Member(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.id = counter;
         counter++;
         this.inss = checkIfValidInss(inss);
@@ -32,8 +32,20 @@ public class Member {
         return eMail;
     }
 
-    private int checkIfValidInss(int inss) {   // to be implemented
-        return inss;
+    private String checkIfValidInss(String inss) {
+        String regex = "^[0-9][0-9](1[0-2]||0[0-9])(3[01]||[012][0-9])[0-9]{5}$";
+        if (inss.matches(regex) && checkInssControlNumber(inss)) {
+            return inss;
+        }
+        throw new IllegalArgumentException("This is not a valid inss number.");
+    }
+
+    private boolean checkInssControlNumber(String inss) {
+        int number = Integer.parseInt(inss.substring(0, 9));
+        int controlNumber = Integer.parseInt(inss.substring((9)));
+        int moduloOfNumber = number % 97;
+        int calculatedControlNumber = 97 - moduloOfNumber;
+        return calculatedControlNumber == controlNumber;
     }
 
     public void seteMail(String eMail) {
@@ -56,7 +68,7 @@ public class Member {
         this.city = city;
     }
 
-    public int getInss() {
+    public String getInss() {
         return inss;
     }
 

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class MemberDto {
     private  int id;
-    private  int inss;
+    private  String inss;
     private  String eMail;
     private  String firstName;
     private  String lastName;
@@ -33,7 +33,7 @@ public class MemberDto {
         if (o == null || getClass() != o.getClass()) return false;
         MemberDto memberDto = (MemberDto) o;
         return id == memberDto.id &&
-                inss == memberDto.inss &&
+                Objects.equals(inss, memberDto.inss) &&
                 houseNumber == memberDto.houseNumber &&
                 postalCode == memberDto.postalCode &&
                 Objects.equals(eMail, memberDto.eMail) &&

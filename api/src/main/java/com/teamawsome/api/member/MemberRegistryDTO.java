@@ -1,7 +1,7 @@
 package com.teamawsome.api.member;
 
 public class MemberRegistryDTO {
-    private int inss;
+    private String inss;
     private String eMail;
     private String firstName;
     private String lastName;
@@ -10,7 +10,7 @@ public class MemberRegistryDTO {
     private int postalCode;
     private String city;
 
-    public MemberRegistryDTO(int inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
+    public MemberRegistryDTO(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.inss = inss;
         this.eMail = eMail;
         this.firstName = firstName;
@@ -21,7 +21,7 @@ public class MemberRegistryDTO {
         this.city = city;
     }
 
-    public int getInss() {
+    public String getInss() {
         return inss;
     }
 
