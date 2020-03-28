@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,8 +36,13 @@ public class BookRepository {
                 .filter(book -> book.getISBN().matches(constructRegExFromWildCard(wildcard)))
                 .collect(Collectors.toUnmodifiableList());
     }
-    public List<Book> findByAuthorName(Author wildcard){
-        return null;
+    public List<Book> findByAuthorName(final Author wildcard){
+        Predicate<Book> matchOnNames =  book -> book.getAuthor().getFirstName().matches(constructRegExFromWildCard(wildcard.getFirstName())) ||
+                                        book.getAuthor().getLastName().matches(constructRegExFromWildCard(wildcard.getLastName()));
+
+        return bookList.stream()
+                .filter(matchOnNames)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     String constructRegExFromWildCard(String input){

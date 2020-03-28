@@ -132,7 +132,7 @@ class BookRepositoryTest {
     public void findByAuthorName_withLastNameSet(){
         BookRepository repository = new BookRepository();
 
-        Author author = new Author("*","*h*");
+        Author author = new Author("","*h*");
         Book one = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",
@@ -156,7 +156,7 @@ class BookRepositoryTest {
         repository.addBook(two);
         repository.addBook(three);
 
-        Assertions.assertThat(repository.findByAuthorName(author)).hasSize(1);
+        Assertions.assertThat(repository.findByAuthorName(author)).hasSize(3);
         Assertions.assertThat(repository.findByAuthorName(author)).hasSameElementsAs(List.of(one, two, three));
     }
 }

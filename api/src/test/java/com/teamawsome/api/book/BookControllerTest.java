@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -138,12 +140,9 @@ class BookControllerTest {
         String expectedEmptyList = objectToJSON(List.<BookDto>of());
 
         Mockito.when(bookRepository.findByAuthorName(new Author("","*o*"))).thenReturn(returnedBooks);
-        Mockito.when(bookRepository.findByAuthorName(new Author("Jos*","*o*"))).thenReturn(List.of(effective));
-        Mockito.when(bookRepository.findByAuthorName(new Author("?gor",""))).thenReturn(List.of(lowLevel));
-        Mockito.when(bookRepository.findByAuthorName(new Author("",""))).thenReturn(List.<Book>of());
 
         String actual = mockMvc.perform(get("/books")
-                .queryParam("withAuthor","{\"firstName\":null, \"lastName\":\"*o*\"}")
+                .queryParam("withAuthor","{\"firstName\":\"\", \"lastName\":\"*o*\"}")
                 .with(user("user")
                         .password("password")
                         .roles("Admin")) )
@@ -154,8 +153,9 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedAll, actual, JSONCompareMode.STRICT);
 
+        Mockito.when(bookRepository.findByAuthorName(new Author("?gor",""))).thenReturn(List.of(lowLevel));
         actual = mockMvc.perform(get("/books")
-                .queryParam("withAuthor","{\"firstName\":\"?gor\", \"lastName\":null}")
+                .queryParam("withAuthor","{\"firstName\":\"?gor\", \"lastName\":\"\"}")
                 .with(user("user")
                         .password("password")
                         .roles("Admin")) )
@@ -166,6 +166,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
 
+        Mockito.when(bookRepository.findByAuthorName(new Author("Jos*","*o*"))).thenReturn(List.of(effective));
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"Jos*\", \"lastName\":\"*o*\"}")
                 .with(user("user")
@@ -178,6 +179,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
 
+        Mockito.when(bookRepository.findByAuthorName(new Author("",""))).thenReturn(List.<Book>of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
                 .with(user("user")

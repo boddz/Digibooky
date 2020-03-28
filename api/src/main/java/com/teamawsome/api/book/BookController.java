@@ -1,5 +1,8 @@
 package com.teamawsome.api.book;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
@@ -51,6 +54,13 @@ public class BookController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @GetMapping(produces = "application/json;charset=UTF-8",params = {"withAuthor"})
+    public List<BookDto> searchByWildCardAuthor(@RequestParam(value = "withAuthor",required = true) String wildCard) throws JsonProcessingException {
+        Author author = new ObjectMapper().readValue(wildCard, Author.class);
+        return bookRepository.findByAuthorName(author).stream()
+                .map(bookMapper::transformBookToBookDto)
+                .collect(Collectors.toUnmodifiableList());
+    }
 
 
     @PostMapping(produces = "application/json", consumes = "application/json")
