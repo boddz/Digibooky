@@ -1,11 +1,9 @@
 package com.teamawsome.domain.book;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -34,24 +32,22 @@ public class BookRepository {
     public List<Book> findByISBNWildCard(final String wildcard){
         Predicate<Book> matchOnISBN = book -> book.getISBN().matches(constructRegExFromWildCard(wildcard));
 
-        return bookList.stream()
-                .filter(matchOnISBN)
-                .collect(Collectors.toUnmodifiableList());
+        return findBasedOnCondition(matchOnISBN);
     }
     public List<Book> findByAuthorName(final Author wildcard){
         Predicate<Book> matchOnNames =  book -> book.getAuthor().getFirstName().matches(constructRegExFromWildCard(wildcard.getFirstName())) ||
                                         book.getAuthor().getLastName().matches(constructRegExFromWildCard(wildcard.getLastName()));
 
-        return bookList.stream()
-                .filter(matchOnNames)
-                .collect(Collectors.toUnmodifiableList());
+        return findBasedOnCondition(matchOnNames);
     }
     public List<Book> findByTitle(final String wildcard){
         Predicate<Book> matchOnTitle = book -> book.getTitle() != null && book.getTitle().matches(constructRegExFromWildCard(wildcard));
 
-        return bookList.stream()
-                .filter(matchOnTitle)
-                .collect(Collectors.toUnmodifiableList());
+        return findBasedOnCondition(matchOnTitle);
+    }
+
+    private List<Book> findBasedOnCondition(Predicate<Book> condition) {
+        return bookList.stream().filter(condition).collect(Collectors.toUnmodifiableList());
     }
 
     String constructRegExFromWildCard(String input){
