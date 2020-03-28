@@ -159,4 +159,36 @@ class BookRepositoryTest {
         Assertions.assertThat(repository.findByAuthorName(author)).hasSize(3);
         Assertions.assertThat(repository.findByAuthorName(author)).hasSameElementsAs(List.of(one, two, three));
     }
+
+    @Test
+    public void findByTitle(){
+        BookRepository repository = new BookRepository();
+
+        Book one = new Book(
+                new Author("Uresh", "Vahalia"),
+                "0131019082",
+                "UNIX Internals - The new frontiers",
+                "This book examines recent advances in modern UNIX systems."
+        );
+        Book two = new Book(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution"
+        );
+        Book three = new Book(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices"
+        );
+
+        repository.addBook(one);
+        repository.addBook(two);
+        repository.addBook(three);
+
+        Assertions.assertThat(repository.findByTitle("")).hasSize(0);
+        Assertions.assertThat(repository.findByTitle("*new*")).hasSize(1);
+        Assertions.assertThat(repository.findByTitle("*new*")).hasSameElementsAs(List.of(one));
+    }
 }

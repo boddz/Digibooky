@@ -192,4 +192,74 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEmptyList, actual, JSONCompareMode.STRICT);
     }
+
+    @Test
+    public void findBookByTitle() throws Exception{
+
+        Book lowLevel = new Book(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution" );
+        Book effective = new Book(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices" );
+        List<Book> returnedBooks =List.of(lowLevel, effective);
+
+        BookDto dtoLowLevel = new BookDto(
+                new Author("Igor","Zhirkov"),
+                "9781484224021",
+                "Low-level Programming",
+                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution" );
+        BookDto dtoEffective = new BookDto(
+                new Author("Joshua", "Bloch"),
+                "9780134685991",
+                "Effective Java",
+                "The definitive guide to Java Platform best practices" );
+        String expectedAll = objectToJSON(List.of(dtoLowLevel, dtoEffective));
+        String expectedLowlevel = objectToJSON(List.of(dtoLowLevel));
+        String expectedEmptyList = objectToJSON(List.<BookDto>of());
+
+        Mockito.when(bookRepository.findByTitle("*a*")).thenReturn(returnedBooks);
+
+        String actual = mockMvc.perform(get("/books")
+                .queryParam("withTitle","*a*")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedAll, actual, JSONCompareMode.STRICT);
+
+        Mockito.when(bookRepository.findByTitle("*gramming")).thenReturn(List.of(lowLevel));
+        actual = mockMvc.perform(get("/books")
+                .queryParam("withTitle","*gramming")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
+
+        Mockito.when(bookRepository.findByTitle("")).thenReturn(List.<Book>of());
+        actual = mockMvc.perform(get("/books")
+                .queryParam("withTitle","")
+                .with(user("user")
+                        .password("password")
+                        .roles("Admin")) )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JSONAssert.assertEquals(expectedEmptyList, actual, JSONCompareMode.STRICT);
+    }
 }

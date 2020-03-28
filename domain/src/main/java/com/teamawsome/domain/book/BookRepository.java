@@ -31,7 +31,7 @@ public class BookRepository {
                 .orElseThrow(BookNotPresentException::new);
     }
 
-    public List<Book> findByISBNWildCard(String wildcard){
+    public List<Book> findByISBNWildCard(final String wildcard){
         return bookList.stream()
                 .filter(book -> book.getISBN().matches(constructRegExFromWildCard(wildcard)))
                 .collect(Collectors.toUnmodifiableList());
@@ -43,6 +43,9 @@ public class BookRepository {
         return bookList.stream()
                 .filter(matchOnNames)
                 .collect(Collectors.toUnmodifiableList());
+    }
+    public List<Book> findByTitle(final String wildcard){
+        return null;
     }
 
     String constructRegExFromWildCard(String input){
