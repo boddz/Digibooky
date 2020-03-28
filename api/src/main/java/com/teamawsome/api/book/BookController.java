@@ -62,6 +62,13 @@ public class BookController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @GetMapping(produces = "application/json;charset=UTF-8",params = {"withTitle"})
+    public List<BookDto> searchByWildCardTitle(@RequestParam("withTitle") String wildCard) {
+        return bookRepository.findByTitle(wildCard).stream()
+                .map(bookMapper::transformBookToBookDto)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public BookDto addBook(@RequestBody BookDto bookDto) {
