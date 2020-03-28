@@ -32,8 +32,10 @@ public class BookRepository {
     }
 
     public List<Book> findByISBNWildCard(final String wildcard){
+        Predicate<Book> matchOnISBN = book -> book.getISBN().matches(constructRegExFromWildCard(wildcard));
+
         return bookList.stream()
-                .filter(book -> book.getISBN().matches(constructRegExFromWildCard(wildcard)))
+                .filter(matchOnISBN)
                 .collect(Collectors.toUnmodifiableList());
     }
     public List<Book> findByAuthorName(final Author wildcard){
@@ -45,7 +47,11 @@ public class BookRepository {
                 .collect(Collectors.toUnmodifiableList());
     }
     public List<Book> findByTitle(final String wildcard){
-        return null;
+        Predicate<Book> matchOnTitle = book -> book.getTitle() != null && book.getTitle().matches(constructRegExFromWildCard(wildcard));
+
+        return bookList.stream()
+                .filter(matchOnTitle)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     String constructRegExFromWildCard(String input){
