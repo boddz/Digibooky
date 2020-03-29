@@ -40,21 +40,29 @@ public class Member {
 
     private String checkIfValidInss(String inss) {
         String regex = "^[0-9][0-9](1[0-2]||0[0-9])(3[01]||[012][0-9])[0-9]{5}$";
-       /* if (inss.matches(regex) && checkInssControlNumber(inss)) {
-            return inss;
-        }*/
-        if (inss.matches(regex)) {
+        if (inss.matches(regex) && checkInssControlNumber(inss)) {
             return inss;
         }
         throw new IllegalArgumentException("This is not a valid inss number.");
     }
 
     private boolean checkInssControlNumber(String inss) {
-        int number = Integer.parseInt(inss.substring(0, 9));
-        int controlNumber = Integer.parseInt(inss.substring((9)));
-        int moduloOfNumber = number % 97;
-        int calculatedControlNumber = 97 - moduloOfNumber;
+        long number = Long.parseLong(inss.substring(0, 9));
+        long numberChecked = checkIfBornAfter1999(number);
+        long controlNumber = Long.parseLong(inss.substring((9)));
+        long moduloOfNumber = numberChecked % 97;
+        long calculatedControlNumber = 97 - moduloOfNumber;
         return calculatedControlNumber == controlNumber;
+    }
+
+    private long checkIfBornAfter1999(long number) {
+        long checkedNumber;
+        if (number<99999999L && number > 1) {
+            checkedNumber = number + 2000000000L;
+        } else {
+            checkedNumber = number;
+        }
+        return checkedNumber;
     }
 
     public void seteMail(String eMail) {

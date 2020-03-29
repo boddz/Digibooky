@@ -8,8 +8,7 @@ import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import com.teamawsome.service.MemberMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.ArrayList;
 import java.util.List;
