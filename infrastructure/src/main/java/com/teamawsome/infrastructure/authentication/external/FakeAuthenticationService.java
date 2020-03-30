@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,8 +16,7 @@ public class FakeAuthenticationService {
 
     @Autowired
     public FakeAuthenticationService(List<ExternalAuthentication> externalAuthenticationss) {
-        this.externalAuthentications = externalAuthenticationss;
-        externalAuthentications.remove(0);
+        this.externalAuthentications = new ArrayList<>();
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("admin").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("librarian").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("member").withPassword("member").withRoles(List.of(BookstoreRole.MEMBER)));
