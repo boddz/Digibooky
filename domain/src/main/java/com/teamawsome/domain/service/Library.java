@@ -29,5 +29,12 @@ public class Library {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    public void deleteBook(String isbn){
+        bookRepository.deleteBook(isbn);
+    }
+
+    public void restoreBook(String isbn){
+        bookRepository.restoreBook(isbn);
+    }
 
 }

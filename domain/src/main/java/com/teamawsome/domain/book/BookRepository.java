@@ -2,8 +2,10 @@ package com.teamawsome.domain.book;
 
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -13,7 +15,7 @@ public class BookRepository {
 
 
     public List<Book> getAllBooks(){
-        return bookList;
+        return bookList.stream().filter(book -> !book.isDestroyed()).collect(Collectors.toUnmodifiableList());
     }
 
 
@@ -22,11 +24,19 @@ public class BookRepository {
         return book;
 
     }
-    public Book getBook(String ISBN){
+
+    private Optional<Book> getBookEvenIfDeleted(String ISBN){
         return bookList.stream()
                 .filter(book -> book.getISBN().equals(ISBN))
-                .findFirst()
-                .orElseThrow(BookNotPresentException::new);
+                .findFirst();
+    }
+    public Book getBook(String ISBN){
+        Optional<Book> book = getBookEvenIfDeleted(ISBN);
+        if(book.isPresent() && !book.get().isDestroyed()){
+            return book.get();
+        } else {
+            throw new BookNotPresentException();
+        }
     }
 
     public List<Book> findByISBNWildCard(final String wildcard){
@@ -60,5 +70,16 @@ public class BookRepository {
         bookToModify.setTitle(title);
         bookToModify.setSummary(summary);
         return bookToModify;
+    }
+
+    public Optional<Book> deleteBook(String isbn){
+        Optional<Book> deleted = getBookEvenIfDeleted(isbn);
+        deleted.ifPresent(book -> book.setDestroyed(true));
+        return deleted;
+    }
+    public Optional<Book> restoreBook(String isbn){
+        Optional<Book> restored = getBookEvenIfDeleted(isbn);
+        restored.ifPresent(book -> book.setDestroyed(false));
+        return restored;
     }
 }

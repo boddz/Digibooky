@@ -7,6 +7,7 @@ public class Book {
     private String ISBN;
     private String title;
     private String summary;
+    private boolean destroyed;
 
 
     public Book(Author author, String ISBN, String title, String summary){
@@ -30,6 +31,9 @@ public class Book {
 
     public String getSummary() {
         return summary;
+    }
+    public boolean isDestroyed(){
+        return destroyed;
     }
 
     @Override
@@ -67,5 +71,9 @@ public class Book {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setDestroyed(boolean bookIsDestroyed){
+        destroyed = bookIsDestroyed;
     }
 }

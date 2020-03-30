@@ -1,10 +1,10 @@
 package com.teamawsome.api.book;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.teamawsome.domain.book.*;
+import com.teamawsome.domain.service.Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,20 +18,22 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/books")
 public class BookController {
 
-    BookRepository bookRepository;
-    BookMapper bookMapper;
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+    private final Library library;
 
     @Autowired
-    public BookController(BookRepository bookRepository, BookMapper bookMapper) {
+    public BookController(BookRepository bookRepository, BookMapper bookMapper, Library library) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
+        this.library = library;
     }
 
     @GetMapping(produces = "application/json")
     public List<BookDto> getAllBooks() {
         List<Book> books = bookRepository.getAllBooks();
         return books.stream()
-                .map(book -> bookMapper.transformBookToBookDto(book))
+                .map(bookMapper::transformBookToBookDto)
                 .collect(Collectors.toList());
     }
 
@@ -67,12 +69,6 @@ public class BookController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    /*@PostMapping(produces = "application/json", consumes = "application/json")
-    public BookDto addBook(@RequestBody BookDto bookDto) {
-        bookRepository.addBook(bookMapper.transformBookDtoToBook(bookDto));
-        return bookDto;
-    }*/
-
     @PostMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     public BookAddedDto addBookStory10(@RequestBody BookAddedDto bookAddedDto){
@@ -85,6 +81,20 @@ public class BookController {
     public BookDto modifyBook(@RequestBody BookAddedDto bookAddedDto){
          Book toReturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
          return bookMapper.transformBookToBookDto(toReturn);
+    }
+
+    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PutMapping(path="/delete/{isbn}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteBook(@PathVariable("isbn") String isbn){
+        library.deleteBook(isbn);
+    }
+
+    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PutMapping(path="/restore/{isbn}")
+    @ResponseStatus(HttpStatus.OK)
+    public void restoreBook(@PathVariable("isbn") String isbn){
+        library.restoreBook(isbn);
     }
 
 
