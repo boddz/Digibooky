@@ -53,4 +53,12 @@ public class BookRepository {
     String constructRegExFromWildCard(String input){
         return input.replace("*",".*").replace("?",".?");
     }
+
+    public Book changeBook(String isbn, String firstName, String lastName, String summary, String title) {
+        Book bookToModify = getBook(isbn);
+        bookToModify.setAuthor(lastName,firstName);
+        bookToModify.setTitle(title);
+        bookToModify.setSummary(summary);
+        return bookToModify;
+    }
 }
