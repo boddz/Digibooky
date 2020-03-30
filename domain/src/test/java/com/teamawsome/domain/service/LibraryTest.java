@@ -10,13 +10,20 @@ import com.teamawsome.domain.dto.LibrarianRentalDto;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
+
+
 public class LibraryTest {
+    private BookRepository bookRepository = Mockito.mock(BookRepository.class);
+    private MemberRepository memberRepository = Mockito.mock(MemberRepository.class);
+    private RentalRepository rentalRepository = Mockito.mock(RentalRepository.class);
+    private Library library = new Library(bookRepository, memberRepository, rentalRepository, new BookMapper());
 
     @Test
     public void getRentalsByMember_WithNoRentals_ReturnsEmptyList(){
-        Library library = new Library(new BookRepository(), new MemberRepository(), new RentalRepository(), new BookMapper());
+        Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of());
         List<LibrarianRentalDto> actual = library.findRentalsByMember("68060105329");
 
         Assertions.assertThat(actual).isNotNull().hasSize(0);
@@ -32,34 +39,15 @@ public class LibraryTest {
                 .withPostalCode(1234)
                 .withCity("Paradise City")
                 .build();
-        final Member memberTwo = Member.MemberBuilder.buildMember()
-                .withInss("68072101358")
-                .withEmail("tim@somewhere.com")
-                .withFirstName("Tim")
-                .withLastName("Niemand")
-                .withStreetName("some street")
-                .withHouseNumber(12)
-                .withPostalCode(1234)
-                .withCity("Paradise City")
-                .build();
         final Book bookOne = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",
                 "UNIX Internals - The new frontiers",
                 "This book examines recent advances in modern UNIX systems."
         );
-        final Book bookTwo = new Book(
-                new Author("Igor","Zhirkov"),
-                "9781484224021",
-                "Low-level Programming",
-                "Low-level Programming explains Intel 64 architecture as the result of Von Neumann architecture evolution"
-        );
-        RentalRepository rentalRepository = new RentalRepository();
-
-        Rental rentalOne = rentalRepository.add(memberOne, bookOne);
-        rentalRepository.add(memberTwo, bookTwo);
+        Rental rentalOne = new Rental(memberOne, bookOne);
         LibrarianRentalDto expected = LibrarianRentalDto.fromRental(rentalOne);
-        Library library = new Library(new BookRepository(), new MemberRepository(), rentalRepository, new BookMapper());
+        Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of(rentalOne));
 
         List<LibrarianRentalDto> actual = library.findRentalsByMember(memberOne.getInss());
 
