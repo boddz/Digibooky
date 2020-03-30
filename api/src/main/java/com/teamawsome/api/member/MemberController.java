@@ -5,7 +5,6 @@ import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.member.NotUniqueException;
 import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
-import com.teamawsome.domain.member.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

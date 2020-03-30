@@ -16,6 +16,7 @@ public class FakeAuthenticationService {
     public FakeAuthenticationService(List<ExternalAuthentication> externalAuthentications) {
         this.externalAuthentications = externalAuthentications;
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("dries").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
+        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("maarten").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
     }
 
     public ExternalAuthentication getUser(String username, String password) {

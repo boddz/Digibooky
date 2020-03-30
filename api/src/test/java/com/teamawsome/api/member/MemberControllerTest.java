@@ -5,7 +5,6 @@ import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.infrastructure.authentication.external.ExternalAuthentication;
 import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
-import com.teamawsome.domain.member.MemberMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
