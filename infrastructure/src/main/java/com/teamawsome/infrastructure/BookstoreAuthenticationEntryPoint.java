@@ -23,5 +23,4 @@ public class BookstoreAuthenticationEntryPoint extends BasicAuthenticationEntryP
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-
 }
