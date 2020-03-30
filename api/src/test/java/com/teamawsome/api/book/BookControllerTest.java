@@ -282,4 +282,25 @@ class BookControllerTest {
        Assertions.assertThat(actualResult).isEqualTo(expectedResult);
     }
 
+    @Test
+    public void modifyBook() {
+        //GIVEN
+        BookRepository bookRepository = new BookRepository();
+        BookController control = new BookController(bookRepository, new BookMapper());
+        Author author = new Author("Tom", "Decrock");
+        Book old = new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
+        bookRepository.addBook(old);
+        BookAddedDto changed = new BookAddedDto("123456", "survival", "Boddy", "Dries", "Fucking Test");
+        Author controlAuthor = new Author("Dries", "Boddy");
+        Book controlll = new Book(controlAuthor, "123456", "survival", "Fucking Test");
+
+        //WHEN
+        control.modifyBook(changed);
+
+        //THEN
+        Assertions.assertThat(old).isEqualTo(controlll);
+
+
+    }
+
 }
