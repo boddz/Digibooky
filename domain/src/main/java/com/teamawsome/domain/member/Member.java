@@ -1,9 +1,5 @@
 package com.teamawsome.domain.member;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.stream.Collectors;
-
 public class Member {
     private final int id;
     private final String inss;

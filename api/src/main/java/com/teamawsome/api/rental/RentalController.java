@@ -6,15 +6,19 @@ import com.teamawsome.domain.book.BookRepository;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.rental.BookRentedOutException;
+import com.teamawsome.domain.rental.LibrarianRentalDto;
 import com.teamawsome.domain.rental.Rental;
 import com.teamawsome.domain.rental.RentalRepository;
+import com.teamawsome.domain.service.Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -24,12 +28,20 @@ public class RentalController {
     BookRepository bookRepository;
     RentalRepository rentalRepository;
     MemberRepository memberRepository;
+    Library library;
 
     @Autowired
-    public RentalController(BookRepository bookRepository, RentalRepository rentalRepository, MemberRepository memberRepository) {
+    public RentalController(BookRepository bookRepository, RentalRepository rentalRepository, MemberRepository memberRepository, Library library) {
         this.bookRepository = bookRepository;
         this.rentalRepository = rentalRepository;
         this.memberRepository = memberRepository;
+        this.library = library;
+    }
+
+    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @GetMapping(produces = "application/json;charset=UTF-8", params = {"withInss"})
+    public List<LibrarianRentalDto> findBooksLentToMemberIdentifiedByINSS(@RequestParam("withInss") String inss){
+        return library.findRentalsByMember(inss);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

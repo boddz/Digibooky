@@ -4,10 +4,7 @@ package com.teamawsome.api.book;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.teamawsome.domain.book.Author;
-import com.teamawsome.domain.book.Book;
-import com.teamawsome.domain.book.BookNotPresentException;
-import com.teamawsome.domain.book.BookRepository;
+import com.teamawsome.domain.book.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,7 +54,7 @@ public class BookController {
 
     @GetMapping(produces = "application/json;charset=UTF-8",params = {"withAuthor"})
     public List<BookDto> searchByWildCardAuthor(@RequestParam(value = "withAuthor",required = true) String wildCard) throws JsonProcessingException {
-        Author author = new ObjectMapper().readValue(wildCard, Author.class);
+        FindByAuthorDto author = new ObjectMapper().readValue(wildCard, FindByAuthorDto.class);
         return bookRepository.findByAuthorName(author).stream()
                 .map(bookMapper::transformBookToBookDto)
                 .collect(Collectors.toUnmodifiableList());

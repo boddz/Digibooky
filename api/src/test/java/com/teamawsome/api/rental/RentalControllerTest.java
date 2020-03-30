@@ -10,6 +10,7 @@ import com.teamawsome.domain.rental.BookRentedOutException;
 import com.teamawsome.domain.rental.Rental;
 import com.teamawsome.domain.rental.RentalNotFoundException;
 import com.teamawsome.domain.rental.RentalRepository;
+import com.teamawsome.domain.service.Library;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RentalControllerTest {
+    private Library getLibrary(){
+        return new Library(new BookRepository(), new MemberRepository(), new RentalRepository());
+    }
 
     @Test
     void rentBook_ifGivenBookDoesNotExist_throwException() {
         //given
-        RentalController rentalController = new RentalController(new BookRepository(), new RentalRepository(), new MemberRepository());
+        RentalController rentalController = new RentalController(new BookRepository(), new RentalRepository(), new MemberRepository(), getLibrary());
         RentBookDto rentBookDto = new RentBookDto("whatever", 1);
         //when
         //then
@@ -33,7 +37,7 @@ class RentalControllerTest {
         //given
         BookRepository bookRepository = new BookRepository();
         MemberRepository memberRepository = new MemberRepository();
-        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), memberRepository);
+        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), memberRepository, getLibrary());
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
@@ -63,7 +67,7 @@ class RentalControllerTest {
         //given
         BookRepository bookRepository = new BookRepository();
         MemberRepository memberRepository = new MemberRepository();
-        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), memberRepository);
+        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), memberRepository, getLibrary());
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
@@ -90,7 +94,7 @@ class RentalControllerTest {
     void rentBook_ifGivenMemberDoesNotExist_throwExceptionWithSuitableMessage() {
         //given
         BookRepository bookRepository = new BookRepository();
-        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), new MemberRepository());
+        RentalController rentalController = new RentalController(bookRepository, new RentalRepository(), new MemberRepository(), getLibrary());
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
@@ -106,7 +110,7 @@ class RentalControllerTest {
         MemberRepository memberRepository=new MemberRepository();
         BookRepository bookRepository=new BookRepository();
         RentalRepository rentalRepository=new RentalRepository();
-        RentalController rentalController=new RentalController(bookRepository,rentalRepository, memberRepository);
+        RentalController rentalController=new RentalController(bookRepository,rentalRepository, memberRepository, getLibrary());
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
@@ -135,11 +139,12 @@ class RentalControllerTest {
         MemberRepository memberRepository=new MemberRepository();
         BookRepository bookRepository=new BookRepository();
         RentalRepository rentalRepository=new RentalRepository();
-        RentalController rentalController=new RentalController(bookRepository,rentalRepository, memberRepository);
+        RentalController rentalController=new RentalController(bookRepository,rentalRepository, memberRepository, getLibrary());
        //when
 
        //then
         Assertions.assertThatThrownBy(()->rentalController.returnBook(1235)).isInstanceOf(RentalNotFoundException.class);
     }
+
 
 }
