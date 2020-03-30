@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BookRepositoryTest {
         private void fillWithUnimportantBook(BookRepository repository) {
             Book one = new Book(

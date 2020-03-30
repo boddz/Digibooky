@@ -1,6 +1,5 @@
 package com.teamawsome.api.member;
 
-import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.member.NotUniqueException;
