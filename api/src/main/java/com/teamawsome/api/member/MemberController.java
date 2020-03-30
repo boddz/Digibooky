@@ -7,6 +7,7 @@ import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationS
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,11 +32,10 @@ public class MemberController {
         this.fakeAuthenticationService = fakeAuthenticationService;
     }
 
-    @PostMapping(path = "{user}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "member", consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberDto registerNewUser(@RequestBody MemberRegistryDTO memberRegistryDTO, @PathVariable String user) {
+    public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO) {
         checkIfValidInput(memberRegistryDTO);
-        //Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(), memberRegistryDTO.getFirstName(), memberRegistryDTO.getLastName(), memberRegistryDTO.getStreetName(), memberRegistryDTO.getHouseNumber(), memberRegistryDTO.getPostalCode(), memberRegistryDTO.getCity());
         Member newMember = buildMember()
                 .withInss(memberRegistryDTO.getInss())
                 .withEmail(memberRegistryDTO.geteMail())
@@ -47,34 +47,53 @@ public class MemberController {
                 .withCity(memberRegistryDTO.getCity())
                 .build();
         memberRepository.addMember(newMember);
-        switch (user) {
-            case "member":
-                addUserToAuthenticationService(memberRegistryDTO, "member", BookstoreRole.MEMBER);
-                break;
-            case "admin":
-                addAdminToAuthenticationService(memberRegistryDTO);
-                break;
-            case "librarian":
-                addLibrarianToAuthenticationService(memberRegistryDTO);
-                break;
-            default:
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "use: admin or librarian or member as pathvariable");
-        }
+        addUserToAuthenticationService(memberRegistryDTO, "member", BookstoreRole.MEMBER);
+        return new MemberDto(newMember);
+
+    }
+
+    @PreAuthorize("hasAuthority('MAKE_ADMIN')")
+    @PostMapping(path = "admin", consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MemberDto registerNewAdmin(@RequestBody MemberRegistryDTO memberRegistryDTO) {
+        checkIfValidInput(memberRegistryDTO);
+        Member newMember = buildMember()
+                .withInss(memberRegistryDTO.getInss())
+                .withEmail(memberRegistryDTO.geteMail())
+                .withFirstName(memberRegistryDTO.getFirstName())
+                .withLastName(memberRegistryDTO.getLastName())
+                .withStreetName(memberRegistryDTO.getStreetName())
+                .withHouseNumber(memberRegistryDTO.getHouseNumber())
+                .withPostalCode(memberRegistryDTO.getPostalCode())
+                .withCity(memberRegistryDTO.getCity())
+                .build();
+        memberRepository.addMember(newMember);
+        addUserToAuthenticationService(memberRegistryDTO, "admin", BookstoreRole.ADMIN);
+        return new MemberDto(newMember);
+    }
+
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
+    @PostMapping(path = "librarian", consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MemberDto registerNewLibrarian(@RequestBody MemberRegistryDTO memberRegistryDTO) {
+        checkIfValidInput(memberRegistryDTO);
+        Member newMember = buildMember()
+                .withInss(memberRegistryDTO.getInss())
+                .withEmail(memberRegistryDTO.geteMail())
+                .withFirstName(memberRegistryDTO.getFirstName())
+                .withLastName(memberRegistryDTO.getLastName())
+                .withStreetName(memberRegistryDTO.getStreetName())
+                .withHouseNumber(memberRegistryDTO.getHouseNumber())
+                .withPostalCode(memberRegistryDTO.getPostalCode())
+                .withCity(memberRegistryDTO.getCity())
+                .build();
+        memberRepository.addMember(newMember);
+        addUserToAuthenticationService(memberRegistryDTO, "librarian", BookstoreRole.LIBRARIAN);
         return new MemberDto(newMember);
     }
 
     private void addUserToAuthenticationService(MemberRegistryDTO memberRegistryDTO, String pasword, BookstoreRole bookstoreRoles) {
         fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), pasword, List.of(bookstoreRoles));
-    }
-
-    @PreAuthorize("hasAuthority('MAKE_ADMIN')")
-    private void addAdminToAuthenticationService(MemberRegistryDTO memberRegistryDTO) {
-        addUserToAuthenticationService(memberRegistryDTO, "admin", BookstoreRole.ADMIN);
-    }
-
-    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
-    private void addLibrarianToAuthenticationService(MemberRegistryDTO memberRegistryDTO) {
-        addUserToAuthenticationService(memberRegistryDTO, "librarian", BookstoreRole.LIBRARIAN);
     }
 
 
@@ -90,6 +109,12 @@ public class MemberController {
     protected void notUniqueException(NotUniqueException e, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected void notException(AccessDeniedException e, HttpServletResponse response) throws IOException {
+        response.sendError(403, e.getMessage());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     protected void illegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

@@ -22,10 +22,10 @@ public class BookstoreAuthenticationProvider implements AuthenticationProvider {
 
     FakeAuthenticationService authService;
 
-//    @Autowired
-//    public BookstoreAuthenticationProvider(FakeAuthenticationService authService) {
-//        this.authService = authService;
-//    }
+    @Autowired
+    public BookstoreAuthenticationProvider(FakeAuthenticationService authService) {
+        this.authService = authService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -33,7 +33,6 @@ public class BookstoreAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         ExternalAuthentication user = authService.getUser(username, password);
-
         if (user==null){
             throw new BadCredentialsException("Username and password not found.");
         } else {
