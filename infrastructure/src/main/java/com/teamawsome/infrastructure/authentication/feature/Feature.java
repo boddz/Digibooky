@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public enum Feature {
-    GET_ALL_BOOKS(BookstoreRole.ADMIN, BookstoreRole.MEMBER, BookstoreRole.LIBRARIAN),
+    GET_ALL_BOOKS(BookstoreRole.ADMIN),
     MAKE_ADMIN(BookstoreRole.ADMIN),
     MAKE_LIBRARIAN(BookstoreRole.LIBRARIAN);
 

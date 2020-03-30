@@ -83,4 +83,9 @@ public class MemberDto {
     public int hashCode() {
         return Objects.hash(id, inss, eMail, firstName, lastName, streetName, houseNumber, postalCode, city);
     }
+
+    public MemberDto setInssToEmpty() {
+        inss = "";
+        return this;
+    }
 }
