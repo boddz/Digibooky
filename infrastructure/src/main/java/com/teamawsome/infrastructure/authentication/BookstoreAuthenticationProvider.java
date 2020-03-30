@@ -3,6 +3,7 @@ package com.teamawsome.infrastructure.authentication;
 import com.teamawsome.infrastructure.authentication.external.ExternalAuthentication;
 import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
 import com.teamawsome.infrastructure.authentication.feature.Feature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,13 +22,17 @@ public class BookstoreAuthenticationProvider implements AuthenticationProvider {
 
     FakeAuthenticationService authService;
 
+    @Autowired
+    public BookstoreAuthenticationProvider(FakeAuthenticationService authService) {
+        this.authService = authService;
+    }
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
         ExternalAuthentication user = authService.getUser(username, password);
-
         if (user==null){
             throw new BadCredentialsException("Username and password not found.");
         } else {

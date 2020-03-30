@@ -57,4 +57,13 @@ public class ExternalAuthentication {
     public int hashCode() {
         return Objects.hash(username, password, roles);
     }
+
+    @Override
+    public String toString() {
+        return "ExternalAuthentication{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }

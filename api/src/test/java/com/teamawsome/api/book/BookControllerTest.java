@@ -2,6 +2,7 @@ package com.teamawsome.api.book;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamawsome.api.rental.ReturnedDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
@@ -17,11 +18,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+
+import static org.mockito.ArgumentMatchers.any;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
-@ComponentScan
+@ComponentScan (basePackages = "com.teamawsome")
 @WebMvcTest(BookController.class)
 class BookControllerTest {
     @MockBean
@@ -104,6 +110,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
     }
+
 
     @Test
     public void findBookByAuthorName() throws Exception{
@@ -258,4 +265,19 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEmptyList, actual, JSONCompareMode.STRICT);
     }
+
+   @Test
+    public void addBookToRepository(){
+        //GIVEN
+        BookRepository bookRepository=new BookRepository();
+        Author author=new Author("Tom", "Decrock");
+        Book book=new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
+        //WHEN
+        Book actualResult= bookRepository.addBook(book);
+        Author expectedAuthor=new Author ("Tom", "Decrock");
+        Book expectedResult=new Book(expectedAuthor, "123456", "How to chill with kids","Tips and tricks to relax while your kids are running around");
+        //THEN
+        Assertions.assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
 }
