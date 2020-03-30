@@ -14,7 +14,8 @@ import com.teamawsome.domain.rental.Rental;
 import com.teamawsome.domain.rental.RentalNotFoundException;
 import com.teamawsome.domain.rental.RentalRepository;
 import com.teamawsome.domain.service.BookMapper;
-import com.teamawsome.domain.service.Library;
+import com.teamawsome.domain.service.LibraryManagement;
+import com.teamawsome.domain.service.RentalMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RentalControllerTest {
-    private Library getLibrary(){
-        return new Library(new BookRepository(), new MemberRepository(), new RentalRepository(), new BookMapper());
+    private LibraryManagement getLibrary(){
+        return new LibraryManagement(new BookRepository(), new MemberRepository(), new RentalRepository(), new BookMapper(), new RentalMapper());
     }
 
     @Test

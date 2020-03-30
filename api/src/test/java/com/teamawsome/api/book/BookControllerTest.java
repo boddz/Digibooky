@@ -11,7 +11,8 @@ import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.rental.RentalRepository;
 import com.teamawsome.domain.service.BookMapper;
 import com.teamawsome.domain.dto.FindByAuthorDto;
-import com.teamawsome.domain.service.Library;
+import com.teamawsome.domain.service.LibraryManagement;
+import com.teamawsome.domain.service.RentalMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -291,8 +292,8 @@ class BookControllerTest {
     public void modifyBook() {
         //GIVEN
         BookRepository bookRepository = new BookRepository();
-        Library library = new Library(bookRepository, new MemberRepository(), new RentalRepository(), new BookMapper());
-        BookController control = new BookController(bookRepository,new BookMapper(), library );
+        LibraryManagement libraryManagement = new LibraryManagement(bookRepository, new MemberRepository(), new RentalRepository(), new BookMapper(), new RentalMapper());
+        BookController control = new BookController(bookRepository,new BookMapper(), libraryManagement);
         Author author = new Author("Tom", "Decrock");
         Book old = new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
         bookRepository.addBook(old);

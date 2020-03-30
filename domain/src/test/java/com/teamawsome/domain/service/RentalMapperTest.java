@@ -31,8 +31,8 @@ public class RentalMapperTest {
                 "UNIX Internals - The new frontiers",
                 "This book examines recent advances in modern UNIX systems."
         );
-        Rental input = new Rental(member, book);
-        LibrarianRentalDto expected = new LibrarianRentalDto(1,book, member, input.getStartingDate(), input.getReturnDate());
+        Rental input = new Rental(0,member, book);
+        LibrarianRentalDto expected = new LibrarianRentalDto(0,book, member, input.getStartingDate(), input.getReturnDate());
         Assertions.assertThat(rentalMapper.toLibrarianRentalDto(input)).isEqualTo(expected);
     }
 }

@@ -1,10 +1,5 @@
 package com.teamawsome.infrastructure;
 
-import com.fasterxml.jackson.core.io.JsonEOFException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

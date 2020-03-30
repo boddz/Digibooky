@@ -55,4 +55,15 @@ public class LibrarianRentalDto {
     public int hashCode() {
         return Objects.hash(rentalId, book, member, startingDate, returnDate);
     }
+
+    @Override
+    public String toString() {
+        return "LibrarianRentalDto{" +
+                "rentalId=" + rentalId +
+                ", book=" + book +
+                ", member=" + member +
+                ", startingDate=" + startingDate +
+                ", returnDate=" + returnDate +
+                '}';
+    }
 }

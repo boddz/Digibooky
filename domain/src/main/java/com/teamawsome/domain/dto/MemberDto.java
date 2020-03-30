@@ -15,16 +15,17 @@ public class MemberDto {
     private int postalCode;
     private String city;
 
-    public MemberDto(Member member) {
-        this.id = member.getId();
-        this.inss = member.getInss();
-        this.eMail = member.geteMail();
-        this.firstName = member.getFirstName();
-        this.lastName = member.getLastName();
-        this.streetName = member.getStreetName();
-        this.houseNumber = member.getHouseNumber();
-        this.postalCode = member.getPostalCode();
-        this.city = member.getCity();
+    public MemberDto(int id, String inss, String email, String firstName, String lastName, String streetName, int houseNumber,
+                     int postalCode, String city){
+        this.id = id;
+        this.inss = inss;
+        this.eMail = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.postalCode = postalCode;
+        this.city = city;
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 package com.teamawsome.api.member;
 
 import com.teamawsome.domain.dto.MemberDto;
+import com.teamawsome.domain.service.MemberManagement;
 import com.teamawsome.domain.service.MemberMapper;
 import com.teamawsome.domain.dto.MemberRegistryDTO;
 import com.teamawsome.domain.member.Member;
@@ -24,79 +25,38 @@ import static com.teamawsome.domain.member.Member.MemberBuilder.*;
 @RestController
 @RequestMapping(path = "/members")
 public class MemberController {
-    MemberRepository memberRepository;
-    MemberMapper memberMapper;
-    FakeAuthenticationService fakeAuthenticationService;
+    MemberManagement memberManagement;
 
     @Autowired
-    public MemberController(MemberRepository memberRepository, MemberMapper memberMapper, FakeAuthenticationService fakeAuthenticationService) {
-        this.memberRepository = memberRepository;
-        this.memberMapper = memberMapper;
-        this.fakeAuthenticationService = fakeAuthenticationService;
+    public MemberController(MemberManagement memberManagement) {
+        this.memberManagement = memberManagement;
     }
 
     @PostMapping(path = "member", consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO) {
-        Member newMember = verifyAndAddNewMember(memberRegistryDTO);
-        addUserToAuthenticationService(memberRegistryDTO, "member", BookstoreRole.MEMBER);
-        return new MemberDto(newMember);
+        return memberManagement.registerMember(memberRegistryDTO);
     }
 
     @PreAuthorize("hasAuthority('MAKE_ADMIN')")
     @PostMapping(path = "admin", consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewAdmin(@RequestBody MemberRegistryDTO memberRegistryDTO) {
-        Member newMember = verifyAndAddNewMember(memberRegistryDTO);
-        addUserToAuthenticationService(memberRegistryDTO, "admin", BookstoreRole.ADMIN);
-        return new MemberDto(newMember);
+        return memberManagement.registerAdministrator(memberRegistryDTO);
     }
 
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     @PostMapping(path = "librarian", consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewLibrarian(@RequestBody MemberRegistryDTO memberRegistryDTO) {
-        Member newMember = verifyAndAddNewMember(memberRegistryDTO);
-        addUserToAuthenticationService(memberRegistryDTO, "librarian", BookstoreRole.LIBRARIAN);
-        return new MemberDto(newMember);
-    }
-
-    private Member verifyAndAddNewMember(@RequestBody MemberRegistryDTO memberRegistryDTO) {
-        checkIfValidInput(memberRegistryDTO);
-        Member newMember = buildMember()
-                .withInss(memberRegistryDTO.getInss())
-                .withEmail(memberRegistryDTO.geteMail())
-                .withFirstName(memberRegistryDTO.getFirstName())
-                .withLastName(memberRegistryDTO.getLastName())
-                .withStreetName(memberRegistryDTO.getStreetName())
-                .withHouseNumber(memberRegistryDTO.getHouseNumber())
-                .withPostalCode(memberRegistryDTO.getPostalCode())
-                .withCity(memberRegistryDTO.getCity())
-                .build();
-        memberRepository.addMember(newMember);
-        return newMember;
-    }
-
-    private void addUserToAuthenticationService(MemberRegistryDTO memberRegistryDTO, String pasword, BookstoreRole bookstoreRoles) {
-        fakeAuthenticationService.addMember(memberRegistryDTO.getFirstName(), pasword, List.of(bookstoreRoles));
-    }
-
-    private void checkIfValidInput(MemberRegistryDTO memberRegistryDTO) {
-        memberRepository.isUniqueEmail(memberRegistryDTO.geteMail());
-        memberRepository.isUniqueInss(memberRegistryDTO.getInss());
-        if (memberRegistryDTO.getLastName().isEmpty() || memberRegistryDTO.getCity().isEmpty()) {
-            throw new IllegalArgumentException("city and lastname must be inserted");
-        }
+        return memberManagement.registerLibrarian(memberRegistryDTO);
     }
 
     @PreAuthorize("hasAuthority('GET_ALL_BOOKS')")
     @GetMapping(produces="application/json")
     @ResponseStatus(HttpStatus.OK)
     public List<MemberDto> getListOfMembers() {
-        return memberRepository.getAllMembers().stream()
-                .map(member -> new MemberDto(member))
-                .map(memberDto -> memberDto.setInssToEmpty())
-                .collect(Collectors.toList());
+        return memberManagement.getListOfMembers();
     }
 
     @ExceptionHandler(NotUniqueException.class)

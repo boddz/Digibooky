@@ -33,7 +33,7 @@ public class RentalRepository {
 
 
     public Rental add(Member member, Book book) {
-        Rental newRental = new Rental(member, book);
+        Rental newRental = new Rental(rentalList.size(), member, book);
         rentalList.add(newRental);
         return newRental;
     }

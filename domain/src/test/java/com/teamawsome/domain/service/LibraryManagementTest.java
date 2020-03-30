@@ -15,16 +15,16 @@ import org.mockito.Mockito;
 import java.util.List;
 
 
-public class LibraryTest {
+public class LibraryManagementTest {
     private BookRepository bookRepository = Mockito.mock(BookRepository.class);
     private MemberRepository memberRepository = Mockito.mock(MemberRepository.class);
     private RentalRepository rentalRepository = Mockito.mock(RentalRepository.class);
-    private Library library = new Library(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
+    private LibraryManagement libraryManagement = new LibraryManagement(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
 
     @Test
     public void getRentalsByMember_WithNoRentals_ReturnsEmptyList(){
         Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of());
-        List<LibrarianRentalDto> actual = library.findRentalsByMember("68060105329");
+        List<LibrarianRentalDto> actual = libraryManagement.findRentalsByMember("68060105329");
 
         Assertions.assertThat(actual).isNotNull().hasSize(0);
     }
@@ -45,11 +45,11 @@ public class LibraryTest {
                 "UNIX Internals - The new frontiers",
                 "This book examines recent advances in modern UNIX systems."
         );
-        Rental rentalOne = new Rental(memberOne, bookOne);
+        Rental rentalOne = new Rental(0, memberOne, bookOne);
         LibrarianRentalDto expected = new RentalMapper().toLibrarianRentalDto(rentalOne);
         Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of(rentalOne));
 
-        List<LibrarianRentalDto> actual = library.findRentalsByMember(memberOne.getInss());
+        List<LibrarianRentalDto> actual = libraryManagement.findRentalsByMember(memberOne.getInss());
 
         Assertions.assertThat(actual)
                 .isNotNull()
