@@ -5,18 +5,26 @@ import com.teamawsome.domain.book.Author;
 import java.util.Objects;
 
 public class BookDto {
-        private Author author;
-        private String ISBN;
-        private String title;
-        private String summary;
+    private Author author;
+    private String ISBN;
+    private String title;
+    private String summary;
 
 
-        public BookDto(Author author, String ISBN, String title, String summary) {
-            this.author = author;
-            this.ISBN = ISBN;
-            this.title = title;
-            this.summary = summary;
+    public BookDto(Author author, String ISBN, String title, String summary) {
+        this.author = author;
+        this.ISBN = checkIfNotEmpty(ISBN);
+        this.title = checkIfNotEmpty(title);
+        this.summary = summary;
+    }
+
+    private String checkIfNotEmpty(String isbn) {
+        if (!(isbn == "")) {
+            return isbn;
         }
+        throw new IllegalArgumentException("Put in something, you moron!");
+    }
+
 
     public Author getAuthor() {
         return author;

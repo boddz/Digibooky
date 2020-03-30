@@ -1,7 +1,9 @@
 package com.teamawsome.api.book;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookNotPresentException;
@@ -29,9 +31,7 @@ public class BookController {
 
     @GetMapping(produces = "application/json")
     public List<BookDto> getAllBooks() {
-
         List<Book> books = bookRepository.getAllBooks();
-
         return books.stream()
                 .map(book -> bookMapper.transformBookToBookDto(book))
                 .collect(Collectors.toList());
@@ -69,10 +69,16 @@ public class BookController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-
-    @PostMapping(produces = "application/json", consumes = "application/json")
+    /*@PostMapping(produces = "application/json", consumes = "application/json")
     public BookDto addBook(@RequestBody BookDto bookDto) {
         bookRepository.addBook(bookMapper.transformBookDtoToBook(bookDto));
         return bookDto;
+    }*/
+
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public BookAddedDto addBookStory10(@RequestBody BookAddedDto bookAddedDto){
+        //Book newBook=new Book(new Author(bookAddedDto.firstName, bookAddedDto.lastName), bookAddedDto.isbn, bookAddedDto.title, bookAddedDto.summary);
+        bookRepository.addBook(bookMapper.transformBookAddedDtoBook(bookAddedDto));
+        return bookAddedDto;
     }
 }
