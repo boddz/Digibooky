@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class RentalRepository {
@@ -43,5 +45,9 @@ public class RentalRepository {
             }
         }
         throw new RentalNotFoundException();
+    }
+
+    public List<Rental> findOnCondition(Predicate<Rental> condition){
+        return rentalList.stream().filter(condition).collect(Collectors.toUnmodifiableList());
     }
 }

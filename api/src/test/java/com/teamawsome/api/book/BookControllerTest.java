@@ -6,6 +6,7 @@ import com.teamawsome.api.rental.ReturnedDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
+import com.teamawsome.domain.book.FindByAuthorDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
@@ -145,7 +144,7 @@ class BookControllerTest {
         String expectedEffective = objectToJSON(List.of(dtoEffective));
         String expectedEmptyList = objectToJSON(List.<BookDto>of());
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("","*o*"))).thenReturn(returnedBooks);
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("","*o*"))).thenReturn(returnedBooks);
 
         String actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"\", \"lastName\":\"*o*\"}")
@@ -159,7 +158,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedAll, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("?gor",""))).thenReturn(List.of(lowLevel));
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("?gor",""))).thenReturn(List.of(lowLevel));
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"?gor\", \"lastName\":\"\"}")
                 .with(user("user")
@@ -172,7 +171,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("Jos*","*o*"))).thenReturn(List.of(effective));
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("Jos*","*o*"))).thenReturn(List.of(effective));
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"Jos*\", \"lastName\":\"*o*\"}")
                 .with(user("user")
@@ -185,7 +184,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("",""))).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.<Book>of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
                 .with(user("user")
@@ -280,7 +279,28 @@ class BookControllerTest {
         Author expectedAuthor=new Author ("Tom", "Decrock");
         Book expectedResult=new Book(expectedAuthor, "123456", "How to chill with kids","Tips and tricks to relax while your kids are running around");
         //THEN
-        Assertions.assertThat(actualResult).isEqualTo(expectedResult);
+       Assertions.assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    public void modifyBook() {
+        //GIVEN
+        BookRepository bookRepository = new BookRepository();
+        BookController control = new BookController(bookRepository, new BookMapper());
+        Author author = new Author("Tom", "Decrock");
+        Book old = new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
+        bookRepository.addBook(old);
+        BookAddedDto changed = new BookAddedDto("123456", "survival", "Boddy", "Dries", "Fucking Test");
+        Author controlAuthor = new Author("Dries", "Boddy");
+        Book controlll = new Book(controlAuthor, "123456", "survival", "Fucking Test");
+
+        //WHEN
+        control.modifyBook(changed);
+
+        //THEN
+        Assertions.assertThat(old).isEqualTo(controlll);
+
+
     }
 
 }

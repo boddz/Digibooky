@@ -1,12 +1,10 @@
 package com.teamawsome.infrastructure.authentication.feature;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public enum Feature {
@@ -23,12 +21,12 @@ public enum Feature {
     }
 
     public List<BookstoreRole> getRoles(){
-        return Arrays.asList(roles);
+        return List.of(roles);
     }
 
     public static List<Feature> getFeaturesForRoles(List<BookstoreRole> rolesOfUser){
 
-        List<Feature> listOfAllFeatures = Arrays.asList(Feature.values());
+        List<Feature> listOfAllFeatures = List.of(Feature.values());
         List<Feature> allowedFeatures = new ArrayList<>();
         for(Feature feature : listOfAllFeatures){
             if(!Collections.disjoint(feature.getRoles(), rolesOfUser)){

@@ -7,8 +7,6 @@ import com.teamawsome.domain.book.Book;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BookMapperTest {
 
     @Test

@@ -47,4 +47,25 @@ public class Book {
     public int hashCode() {
         return Objects.hash(getAuthor(), getISBN(), getTitle(), getSummary());
     }
+
+    public void toModify(String lastName, String firstName) {
+
+    }
+
+    public void setAuthor(String lastName, String firstName) {
+        Author toChange= new Author(firstName, lastName);
+        this.author = toChange;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 }
