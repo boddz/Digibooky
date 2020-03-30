@@ -74,8 +74,8 @@ public class BookController {
     }*/
 
     @PostMapping(produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     public BookAddedDto addBookStory10(@RequestBody BookAddedDto bookAddedDto){
-        //Book newBook=new Book(new Author(bookAddedDto.firstName, bookAddedDto.lastName), bookAddedDto.isbn, bookAddedDto.title, bookAddedDto.summary);
         bookRepository.addBook(bookMapper.transformBookAddedDtoBook(bookAddedDto));
         return bookAddedDto;
     }
@@ -83,10 +83,9 @@ public class BookController {
     @PutMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     public BookDto modifyBook(@RequestBody BookAddedDto bookAddedDto){
-         Book toreturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
-         return bookMapper.transformBookToBookDto(toreturn);
-
-
-
+         Book toReturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
+         return bookMapper.transformBookToBookDto(toReturn);
     }
+
+
 }
