@@ -26,7 +26,7 @@ public class MemberRepository {
     }
 
     private boolean isUnique(String varTocheck, String exeptionmessage, Function<Member, String> function) {
-        if (!memberList.isEmpty() && listAlreadyContains(varTocheck, function)) {
+        if (!memberList.isEmpty() && !listAlreadyContains(varTocheck, function)) {
             throw new NotUniqueException(exeptionmessage);
         }
         return true;
