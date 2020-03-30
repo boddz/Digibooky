@@ -37,7 +37,17 @@ class RentalControllerTest {
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
-        memberRepository.addMember(new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
+        Member member = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
+        memberRepository.addMember(member);
         int memberId = memberRepository.getAllMembers().get(0).getId();
 
         //when
@@ -57,7 +67,17 @@ class RentalControllerTest {
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
-        memberRepository.addMember(new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
+        Member member = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
+        memberRepository.addMember(member);
         int memberId = memberRepository.getAllMembers().get(0).getId();
         RentBookDto bookToBeRentedDto = new RentBookDto("123456", memberId);
         rentalController.rentBook(bookToBeRentedDto);
@@ -90,7 +110,16 @@ class RentalControllerTest {
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
         bookRepository.addBook(book);
-        Member member=new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
+        Member member = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
         Rental newRental=rentalRepository.add(member, book);
 
         //when
