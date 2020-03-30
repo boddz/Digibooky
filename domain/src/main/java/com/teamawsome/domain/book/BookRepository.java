@@ -34,7 +34,7 @@ public class BookRepository {
 
         return findBasedOnCondition(matchOnISBN);
     }
-    public List<Book> findByAuthorName(final Author wildcard){
+    public List<Book> findByAuthorName(final FindByAuthorDto wildcard){
         Predicate<Book> matchOnNames =  book -> book.getAuthor().getFirstName().matches(constructRegExFromWildCard(wildcard.getFirstName())) ||
                                         book.getAuthor().getLastName().matches(constructRegExFromWildCard(wildcard.getLastName()));
 

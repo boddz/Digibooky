@@ -6,6 +6,8 @@ import com.teamawsome.api.rental.ReturnedDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
+import com.teamawsome.domain.book.FindByAuthorDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -142,7 +144,7 @@ class BookControllerTest {
         String expectedEffective = objectToJSON(List.of(dtoEffective));
         String expectedEmptyList = objectToJSON(List.<BookDto>of());
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("","*o*"))).thenReturn(returnedBooks);
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("","*o*"))).thenReturn(returnedBooks);
 
         String actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"\", \"lastName\":\"*o*\"}")
@@ -156,7 +158,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedAll, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("?gor",""))).thenReturn(List.of(lowLevel));
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("?gor",""))).thenReturn(List.of(lowLevel));
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"?gor\", \"lastName\":\"\"}")
                 .with(user("user")
@@ -169,7 +171,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("Jos*","*o*"))).thenReturn(List.of(effective));
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("Jos*","*o*"))).thenReturn(List.of(effective));
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":\"Jos*\", \"lastName\":\"*o*\"}")
                 .with(user("user")
@@ -182,7 +184,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new Author("",""))).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.<Book>of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
                 .with(user("user")
@@ -277,7 +279,7 @@ class BookControllerTest {
         Author expectedAuthor=new Author ("Tom", "Decrock");
         Book expectedResult=new Book(expectedAuthor, "123456", "How to chill with kids","Tips and tricks to relax while your kids are running around");
         //THEN
-        Assertions.assertThat(actualResult).isEqualTo(expectedResult);
+       Assertions.assertThat(actualResult).isEqualTo(expectedResult);
     }
 
 }

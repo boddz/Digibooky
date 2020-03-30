@@ -12,8 +12,16 @@ public class RentalRepositoryTest {
     @Test
     public void returnRentalsBasedOnCondition(){
         RentalRepository repository = new RentalRepository();
-        final Member member = new Member("68060105329","harald@somewhere.com","Harald", "Brinkhof",
-                "some street", 12, 1234, "Paradise City");
+        final Member member = Member.MemberBuilder.buildMember()
+                                .withInss("68060105329")
+                                .withEmail("harald@somewhere.com")
+                                .withFirstName("Harald")
+                                .withLastName("Brinkhof")
+                                .withStreetName("some street")
+                                .withHouseNumber(12)
+                                .withPostalCode(1234)
+                                .withCity("Paradise City")
+                                .build();
 
         final Book bookOne = new Book(
                 new Author("Uresh", "Vahalia"),

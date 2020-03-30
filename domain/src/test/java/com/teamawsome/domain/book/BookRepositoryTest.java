@@ -88,7 +88,7 @@ class BookRepositoryTest {
     public void findByAuthorName_withAllFieldsEmpty_ReturnsEmptyList(){
         BookRepository repository = new BookRepository();
 
-        Author author = new Author("","");
+        FindByAuthorDto author = new FindByAuthorDto("","");
         fillWithUnimportantBook(repository);
 
         Assertions.assertThat(repository.findByAuthorName(author)).hasSize(0);
@@ -98,7 +98,7 @@ class BookRepositoryTest {
     public void findByAuthorName_withFirstNameSet(){
         BookRepository repository = new BookRepository();
 
-        Author author = new Author("U*h*","");
+        FindByAuthorDto author = new FindByAuthorDto("U*h*","");
         Book one = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",
@@ -130,7 +130,7 @@ class BookRepositoryTest {
     public void findByAuthorName_withLastNameSet(){
         BookRepository repository = new BookRepository();
 
-        Author author = new Author("","*h*");
+        FindByAuthorDto author = new FindByAuthorDto("","*h*");
         Book one = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",

@@ -22,10 +22,26 @@ public class LibraryTest {
         Assertions.assertThat(actual).isNotNull().hasSize(0);
     }
     @Test public void getRentalsByMember_WithRentals_ReturnsAllRentals(){
-        final Member memberOne = new Member("68060105329","harald@somewhere.com","Harald", "Brinkhof",
-                "some street", 12, 1234, "Paradise City");
-        final Member memberTwo = new Member("68072101358","tim@somewhere.com","Tim", "Niemand",
-                "some street", 12, 1234, "Paradise City");
+        final Member memberOne = Member.MemberBuilder.buildMember()
+                .withInss("68060105329")
+                .withEmail("harald@somewhere.com")
+                .withFirstName("Harald")
+                .withLastName("Brinkhof")
+                .withStreetName("some street")
+                .withHouseNumber(12)
+                .withPostalCode(1234)
+                .withCity("Paradise City")
+                .build();
+        final Member memberTwo = Member.MemberBuilder.buildMember()
+                .withInss("68072101358")
+                .withEmail("tim@somewhere.com")
+                .withFirstName("Tim")
+                .withLastName("Niemand")
+                .withStreetName("some street")
+                .withHouseNumber(12)
+                .withPostalCode(1234)
+                .withCity("Paradise City")
+                .build();
         final Book bookOne = new Book(
                 new Author("Uresh", "Vahalia"),
                 "0131019082",
