@@ -16,6 +16,6 @@ class BookMapperTest {
         BookDto book1Dto = new BookDto(book1.getAuthor(), book1.getISBN(), book1.getTitle(), book1.getSummary());
         BookMapper bookMapper = new BookMapper();
 
-        Assertions.assertThat(bookMapper.transformBookToBookDto(book1)).isEqualTo(book1Dto);
+        Assertions.assertThat(bookMapper.toBookDto(book1)).isEqualTo(book1Dto);
     }
 }

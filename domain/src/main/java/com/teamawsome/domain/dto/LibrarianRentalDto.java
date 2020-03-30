@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class LibrarianRentalDto {
-
     private int rentalId;
     private Book book;
     private Member member;

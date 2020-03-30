@@ -37,7 +37,7 @@ public class BookController {
     public List<BookDto> getAllBooks() {
         List<Book> books = bookRepository.getAllBooks();
         return books.stream()
-                .map(bookMapper::transformBookToBookDto)
+                .map(bookMapper::toBookDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class BookController {
     public BookDto getDetailsOfBook(@PathVariable String ISBN) {
         try {
             Book askedBook = bookRepository.getBook(ISBN);
-            return bookMapper.transformBookToBookDto(askedBook);
+            return bookMapper.toBookDto(askedBook);
         } catch (BookNotPresentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Go away, no book today!", exception);
         }
@@ -54,7 +54,7 @@ public class BookController {
     @GetMapping(produces = "application/json;charset=UTF-8",params = {"withIsbn"})
     public List<BookDto> searchByWildCardISBN(@RequestParam("withIsbn") String wildCard) {
         return bookRepository.findByISBNWildCard(wildCard).stream()
-                .map(bookMapper::transformBookToBookDto)
+                .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -62,21 +62,21 @@ public class BookController {
     public List<BookDto> searchByWildCardAuthor(@RequestParam(value = "withAuthor",required = true) String wildCard) throws JsonProcessingException {
         FindByAuthorDto author = new ObjectMapper().readValue(wildCard, FindByAuthorDto.class);
         return bookRepository.findByAuthorName(author).stream()
-                .map(bookMapper::transformBookToBookDto)
+                .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @GetMapping(produces = "application/json;charset=UTF-8",params = {"withTitle"})
     public List<BookDto> searchByWildCardTitle(@RequestParam("withTitle") String wildCard) {
         return bookRepository.findByTitle(wildCard).stream()
-                .map(bookMapper::transformBookToBookDto)
+                .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     public BookAddedDto addBookStory10(@RequestBody BookAddedDto bookAddedDto){
-        bookRepository.addBook(bookMapper.transformBookAddedDtoBook(bookAddedDto));
+        bookRepository.addBook(bookMapper.toBook(bookAddedDto));
         return bookAddedDto;
     }
 

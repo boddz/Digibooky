@@ -1,5 +1,4 @@
 package com.teamawsome.domain.dto;
-
 import java.util.Objects;
 
 public class ReturnedDto {

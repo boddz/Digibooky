@@ -3,7 +3,6 @@ package com.teamawsome.domain.dto;
 import java.time.LocalDate;
 
 public class RentalDto {
-
     private int rentalId;
     private int memberId;
     private String isbn;

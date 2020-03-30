@@ -1,6 +1,5 @@
 package com.teamawsome.domain.service;
 
-import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
 import com.teamawsome.domain.dto.BookAddedDto;
 import com.teamawsome.domain.dto.BookDto;
@@ -43,6 +42,6 @@ public class Library {
     }
 
     public BookDto changeBook(BookAddedDto bookToChange){
-        return bookMapper.transformBookToBookDto(bookRepository.changeBook(bookMapper.transformBookAddedDtoBook(bookToChange)));
+        return bookMapper.toBookDto(bookRepository.changeBook(bookMapper.toBook(bookToChange)));
     }
 }
