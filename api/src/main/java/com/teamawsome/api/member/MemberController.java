@@ -1,5 +1,8 @@
 package com.teamawsome.api.member;
 
+import com.teamawsome.domain.dto.MemberDto;
+import com.teamawsome.domain.service.MemberMapper;
+import com.teamawsome.domain.dto.MemberRegistryDTO;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.member.NotUniqueException;
@@ -10,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

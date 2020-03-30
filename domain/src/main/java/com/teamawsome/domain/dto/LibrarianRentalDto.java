@@ -1,7 +1,8 @@
-package com.teamawsome.domain.rental;
+package com.teamawsome.domain.dto;
 
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.member.Member;
+import com.teamawsome.domain.rental.Rental;
 
 import java.time.LocalDate;
 import java.util.Objects;

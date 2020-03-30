@@ -1,4 +1,4 @@
-package com.teamawsome.api.member;
+package com.teamawsome.domain.dto;
 
 public class MemberRegistryDTO {
     private String inss;

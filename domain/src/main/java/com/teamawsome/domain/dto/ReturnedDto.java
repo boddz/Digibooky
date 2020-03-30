@@ -1,4 +1,4 @@
-package com.teamawsome.api.rental;
+package com.teamawsome.domain.dto;
 
 import java.util.Objects;
 

@@ -6,7 +6,7 @@ import com.teamawsome.domain.book.BookRepository;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.rental.Rental;
-import com.teamawsome.domain.rental.LibrarianRentalDto;
+import com.teamawsome.domain.dto.LibrarianRentalDto;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class LibraryTest {
 
     @Test
     public void getRentalsByMember_WithNoRentals_ReturnsEmptyList(){
-        Library library = new Library(new BookRepository(), new MemberRepository(), new RentalRepository());
+        Library library = new Library(new BookRepository(), new MemberRepository(), new RentalRepository(), new BookMapper());
         List<LibrarianRentalDto> actual = library.findRentalsByMember("68060105329");
 
         Assertions.assertThat(actual).isNotNull().hasSize(0);
@@ -59,7 +59,7 @@ public class LibraryTest {
         Rental rentalOne = rentalRepository.add(memberOne, bookOne);
         rentalRepository.add(memberTwo, bookTwo);
         LibrarianRentalDto expected = LibrarianRentalDto.fromRental(rentalOne);
-        Library library = new Library(new BookRepository(), new MemberRepository(), rentalRepository);
+        Library library = new Library(new BookRepository(), new MemberRepository(), rentalRepository, new BookMapper());
 
         List<LibrarianRentalDto> actual = library.findRentalsByMember(memberOne.getInss());
 

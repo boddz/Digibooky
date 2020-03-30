@@ -1,4 +1,4 @@
-package com.teamawsome.api.member;
+package com.teamawsome.domain.dto;
 
 import com.teamawsome.domain.member.Member;
 

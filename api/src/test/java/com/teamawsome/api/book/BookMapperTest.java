@@ -1,9 +1,9 @@
 package com.teamawsome.api.book;
 
-import com.teamawsome.api.book.BookDto;
-import com.teamawsome.api.book.BookMapper;
+import com.teamawsome.domain.dto.BookDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
+import com.teamawsome.domain.service.BookMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

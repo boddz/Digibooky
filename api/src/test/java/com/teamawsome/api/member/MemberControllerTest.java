@@ -1,5 +1,8 @@
 package com.teamawsome.api.member;
 
+import com.teamawsome.domain.dto.MemberDto;
+import com.teamawsome.domain.service.MemberMapper;
+import com.teamawsome.domain.dto.MemberRegistryDTO;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.infrastructure.authentication.external.ExternalAuthentication;
@@ -7,16 +10,11 @@ import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationS
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.util.Base64Utils;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 

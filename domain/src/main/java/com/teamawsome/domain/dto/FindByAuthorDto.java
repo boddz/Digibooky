@@ -1,4 +1,4 @@
-package com.teamawsome.domain.book;
+package com.teamawsome.domain.dto;
 
 import java.util.Objects;
 

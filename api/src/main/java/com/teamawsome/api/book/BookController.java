@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.teamawsome.domain.book.*;
+import com.teamawsome.domain.dto.BookAddedDto;
+import com.teamawsome.domain.dto.BookDto;
+import com.teamawsome.domain.service.BookMapper;
+import com.teamawsome.domain.dto.FindByAuthorDto;
 import com.teamawsome.domain.service.Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,9 +82,8 @@ public class BookController {
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
-    public BookDto modifyBook(@RequestBody BookAddedDto bookAddedDto){
-         Book toReturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
-         return bookMapper.transformBookToBookDto(toReturn);
+    public BookDto modifyBook(@RequestBody BookAddedDto bookToChange){
+         return library.changeBook(bookToChange);
     }
 
     @PreAuthorize("hasAuthority('LIBRARIAN')")

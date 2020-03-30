@@ -52,13 +52,9 @@ public class Book {
         return Objects.hash(getAuthor(), getISBN(), getTitle(), getSummary());
     }
 
-    public void toModify(String lastName, String firstName) {
 
-    }
-
-    public void setAuthor(String lastName, String firstName) {
-        Author toChange= new Author(firstName, lastName);
-        this.author = toChange;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public void setISBN(String ISBN) {

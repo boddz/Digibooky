@@ -1,5 +1,6 @@
 package com.teamawsome.domain.book;
 
+import com.teamawsome.domain.dto.FindByAuthorDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

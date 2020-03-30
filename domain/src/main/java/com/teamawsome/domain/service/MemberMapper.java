@@ -1,4 +1,4 @@
-package com.teamawsome.api.member;
+package com.teamawsome.domain.service;
 
 import org.springframework.stereotype.Component;
 
