@@ -33,7 +33,6 @@ public class MemberRepository {
     }
 
     private boolean listAlreadyContains(String email, Function<Member, String> function) {
-        Function<Member, String> geteMail = Member::geteMail;
         return memberList.stream()
                 .map(function).noneMatch(x -> x.equals(email));
     }
