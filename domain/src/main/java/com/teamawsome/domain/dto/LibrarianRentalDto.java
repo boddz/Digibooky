@@ -22,9 +22,6 @@ public class LibrarianRentalDto {
         this.returnDate = returnDate;
     }
 
-    public static LibrarianRentalDto fromRental(Rental rental){
-        return new LibrarianRentalDto(rental.getRentalId(),rental.getBook(),rental.getMember(),rental.getStartingDate(),rental.getReturnDate());
-    }
 
     public int getRentalId(){
         return rentalId;

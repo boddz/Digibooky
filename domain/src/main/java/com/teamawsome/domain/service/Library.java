@@ -18,18 +18,21 @@ public class Library {
     private final MemberRepository memberRepository;
     private final RentalRepository rentalRepository;
     private final BookMapper bookMapper;
+    private final RentalMapper rentalMapper;
 
     @Autowired
-    public Library(BookRepository bookRepository, MemberRepository memberRepository, RentalRepository rentalRepository, BookMapper bookMapper){
+    public Library(BookRepository bookRepository, MemberRepository memberRepository, RentalRepository rentalRepository,
+                   BookMapper bookMapper, RentalMapper rentalMapper){
         this.bookRepository = bookRepository;
         this.memberRepository = memberRepository;
         this.rentalRepository = rentalRepository;
         this.bookMapper = bookMapper;
+        this.rentalMapper = rentalMapper;
     }
 
     public List<LibrarianRentalDto> findRentalsByMember(final String inss){
         return rentalRepository.findOnCondition(rental -> rental.getMember().getInss().equals(inss))
-                .stream().map(LibrarianRentalDto::fromRental)
+                .stream().map(rentalMapper::toLibrarianRentalDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 

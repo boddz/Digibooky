@@ -19,7 +19,7 @@ public class LibraryTest {
     private BookRepository bookRepository = Mockito.mock(BookRepository.class);
     private MemberRepository memberRepository = Mockito.mock(MemberRepository.class);
     private RentalRepository rentalRepository = Mockito.mock(RentalRepository.class);
-    private Library library = new Library(bookRepository, memberRepository, rentalRepository, new BookMapper());
+    private Library library = new Library(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
 
     @Test
     public void getRentalsByMember_WithNoRentals_ReturnsEmptyList(){
@@ -46,7 +46,7 @@ public class LibraryTest {
                 "This book examines recent advances in modern UNIX systems."
         );
         Rental rentalOne = new Rental(memberOne, bookOne);
-        LibrarianRentalDto expected = LibrarianRentalDto.fromRental(rentalOne);
+        LibrarianRentalDto expected = new RentalMapper().toLibrarianRentalDto(rentalOne);
         Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of(rentalOne));
 
         List<LibrarianRentalDto> actual = library.findRentalsByMember(memberOne.getInss());
