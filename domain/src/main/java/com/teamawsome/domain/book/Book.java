@@ -1,5 +1,7 @@
 package com.teamawsome.domain.book;
 
+import java.util.Objects;
+
 public class Book {
     private Author author;
     private String ISBN;
@@ -28,5 +30,21 @@ public class Book {
 
     public String getSummary() {
         return summary;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+        Book book = (Book) o;
+        return Objects.equals(getAuthor(), book.getAuthor()) &&
+                Objects.equals(getISBN(), book.getISBN()) &&
+                Objects.equals(getTitle(), book.getTitle()) &&
+                Objects.equals(getSummary(), book.getSummary());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAuthor(), getISBN(), getTitle(), getSummary());
     }
 }

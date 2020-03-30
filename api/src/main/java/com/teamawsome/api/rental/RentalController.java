@@ -52,6 +52,7 @@ public class RentalController {
         else{
             lateMessage="You're on time!";
         }
+
         return new ReturnedDto(returnedRental.getRentalId(), returnedRental.getMember().getId(), returnedRental.getBook().getISBN(), lateMessage);
     }
 

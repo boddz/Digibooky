@@ -9,8 +9,15 @@ public class Author {
     private Author(){}
     public Author(String firstName, String lastName){
         this.firstName=firstName;
-        this.lastName=lastName;
+        this.lastName=checkIfNotEmpty(lastName);
     }
+    private String checkIfNotEmpty(String lastName) {
+        if (!(lastName == "")) {
+            return lastName;
+        }
+        throw new IllegalArgumentException("Put in something, you moron!");
+    }
+
 
     public String getFirstName() {
         return firstName;
