@@ -12,17 +12,17 @@ public class BookDto {
 
 
     public BookDto(Author author, String ISBN, String title, String summary) {
+        assertNotEmpty(ISBN);
+        assertNotEmpty(title);
+
         this.author = author;
-        this.ISBN = checkIfNotEmpty(ISBN);
-        this.title = checkIfNotEmpty(title);
+        this.ISBN = ISBN;
+        this.title = title;
         this.summary = summary;
     }
 
-    private String checkIfNotEmpty(String isbn) {
-        if (!(isbn == "")) {
-            return isbn;
-        }
-        throw new IllegalArgumentException("Put in something, you moron!");
+    private void assertNotEmpty(String toCheck) {
+        if(toCheck == null || toCheck.isBlank()) throw new IllegalArgumentException("Put in something, you moron!");
     }
 
 
