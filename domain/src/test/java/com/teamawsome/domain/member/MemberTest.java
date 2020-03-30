@@ -51,7 +51,7 @@ class MemberTest {
                 .withHouseNumber(5)
                 .withPostalCode(9000)
                 .withCity("Gent");
-        Assertions.assertThatThrownBy(() -> builder.build())
+        Assertions.assertThatThrownBy(builder::build)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Wrong form of Email");
 
@@ -68,7 +68,7 @@ class MemberTest {
                 .withHouseNumber(5)
                 .withPostalCode(9000)
                 .withCity("Gent");
-        Assertions.assertThatThrownBy(() -> builder.build())
+        Assertions.assertThatThrownBy(builder::build)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Wrong form of Email");
 
@@ -100,7 +100,7 @@ class MemberTest {
                 .withHouseNumber(5)
                 .withPostalCode(9000)
                 .withCity("Gent");
-        Assertions.assertThatThrownBy(() -> builder.build())
+        Assertions.assertThatThrownBy(builder::build)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("This is not a valid inss number.");
     }
@@ -116,7 +116,7 @@ class MemberTest {
                 .withHouseNumber(5)
                 .withPostalCode(9000)
                 .withCity("Gent");
-        Assertions.assertThatThrownBy(() -> builder.build())
+        Assertions.assertThatThrownBy(builder::build)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("This is not a valid inss number.");
     }

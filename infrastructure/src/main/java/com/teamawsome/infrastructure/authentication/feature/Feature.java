@@ -1,7 +1,5 @@
 package com.teamawsome.infrastructure.authentication.feature;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +32,6 @@ public enum Feature {
             }
         }
         return allowedFeatures;
-
-//        return  Arrays.asList(Feature.values()).stream()
-//                .filter(feature -> !Collections.disjoint(rolesOfUser, rolesOfUser))
-//                .collect(Collectors.toList());
     }
 
 

@@ -31,16 +31,6 @@ public class ReturnedDto {
     }
 
     @Override
-    public String toString() {
-        return "ReturnedDto{" +
-                "rentalId=" + rentalId +
-                ", memberId=" + memberId +
-                ", isbn='" + isbn + '\'' +
-                ", ontimeMessage='" + ontimeMessage + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ReturnedDto)) return false;

@@ -2,13 +2,8 @@ package com.teamawsome.api.member;
 
 import com.teamawsome.domain.dto.MemberDto;
 import com.teamawsome.domain.service.MemberManagement;
-import com.teamawsome.domain.service.MemberMapper;
 import com.teamawsome.domain.dto.MemberRegistryDTO;
-import com.teamawsome.domain.member.Member;
-import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.member.NotUniqueException;
-import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
-import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.teamawsome.domain.member.Member.MemberBuilder.*;
 
 @RestController
 @RequestMapping(path = "/members")

@@ -2,8 +2,6 @@ package com.teamawsome.domain.dto;
 
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.member.Member;
-import com.teamawsome.domain.rental.Rental;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -54,16 +52,5 @@ public class LibrarianRentalDto {
     @Override
     public int hashCode() {
         return Objects.hash(rentalId, book, member, startingDate, returnDate);
-    }
-
-    @Override
-    public String toString() {
-        return "LibrarianRentalDto{" +
-                "rentalId=" + rentalId +
-                ", book=" + book +
-                ", member=" + member +
-                ", startingDate=" + startingDate +
-                ", returnDate=" + returnDate +
-                '}';
     }
 }

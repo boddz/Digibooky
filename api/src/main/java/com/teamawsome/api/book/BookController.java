@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/books")
 public class BookController {
-
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final LibraryManagement libraryManagement;
@@ -37,7 +36,7 @@ public class BookController {
     }
 
     @GetMapping(produces = "application/json", consumes = "application/json", path = "/{ISBN}")
-    public BookDto getDetailsOfBook(@PathVariable String isbn) {
+    public BookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
         return libraryManagement.getDetailsOfBook(isbn);
     }
 

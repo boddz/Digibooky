@@ -3,7 +3,6 @@ package com.teamawsome.infrastructure.authentication.external;
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,8 @@ public class FakeAuthenticationService {
     private final List<ExternalAuthentication> externalAuthentications;
 
     @Autowired
-    public FakeAuthenticationService(List<ExternalAuthentication> externalAuthenticationss) {
-        this.externalAuthentications = new ArrayList<>();
+    public FakeAuthenticationService(List<ExternalAuthentication> externalAuthentications) {
+        this.externalAuthentications = new ArrayList<>(); // TODO show the others, this can't be correct
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("admin").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("librarian").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
         externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("member").withPassword("member").withRoles(List.of(BookstoreRole.MEMBER)));

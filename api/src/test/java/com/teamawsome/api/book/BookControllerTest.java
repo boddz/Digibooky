@@ -26,11 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-
-import static org.mockito.ArgumentMatchers.any;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -190,7 +185,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
                 .with(user("user")
@@ -260,7 +255,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByTitle("")).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByTitle("")).thenReturn(List.of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withTitle","")
                 .with(user("user")

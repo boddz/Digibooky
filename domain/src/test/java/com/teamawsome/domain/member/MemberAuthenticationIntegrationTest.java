@@ -8,15 +8,10 @@ import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationS
 import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 public class MemberAuthenticationIntegrationTest {
-
     @Test
     public void addNewAdmin_memberIsAddedToRepository() {
         FakeAuthenticationService fakeAuthenticationService = new FakeAuthenticationService(new ArrayList<>());

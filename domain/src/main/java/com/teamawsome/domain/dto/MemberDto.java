@@ -1,7 +1,4 @@
 package com.teamawsome.domain.dto;
-
-import com.teamawsome.domain.member.Member;
-
 import java.util.Objects;
 
 public class MemberDto {

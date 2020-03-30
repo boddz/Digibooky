@@ -53,15 +53,4 @@ public class BookAddedDto {
     public int hashCode() {
         return Objects.hash(getIsbn(), getTitle(), getLastName(), getFirstName(), getSummary());
     }
-
-    @Override
-    public String toString() {
-        return "BookAddedDto{" +
-                "isbn='" + isbn + '\'' +
-                ", title='" + title + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", summary='" + summary + '\'' +
-                '}';
-    }
 }

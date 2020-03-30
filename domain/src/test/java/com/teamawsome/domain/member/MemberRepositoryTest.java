@@ -1,15 +1,7 @@
 package com.teamawsome.domain.member;
 
-import com.teamawsome.domain.dto.MemberDto;
-import com.teamawsome.domain.dto.MemberRegistryDTO;
-import com.teamawsome.domain.service.MemberMapper;
-import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MemberRepositoryTest {
 

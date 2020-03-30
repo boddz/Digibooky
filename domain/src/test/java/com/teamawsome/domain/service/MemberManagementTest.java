@@ -4,15 +4,10 @@ import com.teamawsome.domain.dto.MemberDto;
 import com.teamawsome.domain.dto.MemberRegistryDTO;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
-import com.teamawsome.infrastructure.authentication.external.ExternalAuthentication;
 import com.teamawsome.infrastructure.authentication.external.FakeAuthenticationService;
-import com.teamawsome.infrastructure.authentication.feature.BookstoreRole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
