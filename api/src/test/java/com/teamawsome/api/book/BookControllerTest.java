@@ -286,7 +286,7 @@ class BookControllerTest {
     public void modifyBook() {
         //GIVEN
         BookRepository bookRepository = new BookRepository();
-        BookController control = new BookController(bookRepository, new BookMapper());
+        BookController control = new BookController(bookRepository, new BookMapper(), null);
         Author author = new Author("Tom", "Decrock");
         Book old = new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
         bookRepository.addBook(old);
