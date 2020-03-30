@@ -20,7 +20,17 @@ class MemberControllerTest {
         MemberRepository memberRepository = new MemberRepository();
         MemberController memberController = new MemberController(memberRepository, new MemberMapper(), new FakeAuthenticationService(new ArrayList<>()));
         MemberDto actual = memberController.registerNewUser( new MemberRegistryDTO("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"), "member");
-        MemberDto expected = new MemberDto(new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent"));
+        Member expectedMember = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
+        MemberDto expected = new MemberDto(expectedMember);
         assertEquals(1, memberRepository.getAllMembers().size());
         assertEquals(expected, actual);
 
@@ -42,9 +52,27 @@ class MemberControllerTest {
     @Test
     void EmailIsUnique_WhenIsUnique_createNewMember() {
         MemberRepository memberRepository = new MemberRepository();
-        Member john = new Member("00000000097", "tom@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
+        Member john = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
         memberRepository.addMember(john);
-        Member lennon = new Member("06022308177", "to@gm.com", "tom", "dc", "straat", 5, 9000, "Gent");
+        Member lennon = Member.MemberBuilder.buildMember()
+                .withInss("06022308177")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
         memberRepository.addMember(lennon);
         assertEquals(2, memberRepository.getAllMembers().size());
 

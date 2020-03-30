@@ -16,8 +16,8 @@ public class Member {
     private String city;
     private static int counter = 100;
 
-
-    public Member(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
+/*
+    private Member(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
         this.id = counter++;
         this.inss = checkIfValidInss(inss);
         this.eMail = checkIfValidEmail(eMail);
@@ -27,7 +27,18 @@ public class Member {
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.city = city;
+    }*/
 
+    private Member(MemberBuilder builder){
+        this.id = counter++;
+        this.inss = checkIfValidInss(builder.inss);
+        this.eMail = checkIfValidEmail(builder.eMail);
+        this.firstName = builder.firstName;
+        this.lastName = builder.lastName;
+        this.streetName = builder.streetName;
+        this.houseNumber = builder.houseNumber;
+        this.postalCode = builder.postalCode;
+        this.city = builder.city;
     }
 
     private String checkIfValidEmail(String email) {
@@ -57,7 +68,7 @@ public class Member {
 
     private long checkIfBornAfter1999(long number) {
         long checkedNumber;
-        if (number<99999999L && number > 1) {
+        if (number < 99999999L && number > 1) {
             checkedNumber = number + 2000000000L;
         } else {
             checkedNumber = number;
@@ -120,5 +131,64 @@ public class Member {
     public int getId() {
         return id;
     }
+
+
+    /*
+    Builder
+     */
+
+    public static class MemberBuilder {
+        private String inss;
+        private String eMail;
+        private String firstName;
+        private String lastName;
+        private String streetName;
+        private int houseNumber;
+        private int postalCode;
+        private String city;
+
+        public static MemberBuilder buildMember() {
+            return new MemberBuilder();
+        }
+
+        public MemberBuilder withInss(String inss) {
+            this.inss = inss;
+            return this;
+        }
+        public MemberBuilder withEmail(String email){
+            this.eMail = email;
+            return this;
+        }
+        public MemberBuilder withFirstName(String firstName){
+            this.firstName = firstName;
+            return this;
+        }
+        public MemberBuilder withLastName(String lastName){
+            this.lastName = lastName;
+            return this;
+        }
+        public MemberBuilder withStreetName(String streetName){
+            this.streetName = streetName;
+            return this;
+        }
+        public MemberBuilder withHouseNumber(int houseNumber){
+            this.houseNumber = houseNumber;
+            return this;
+        }
+        public MemberBuilder withPostalCode(int postalCode){
+            this.postalCode = postalCode;
+            return this;
+        }
+        public MemberBuilder withCity(String city){
+            this.city = city;
+            return this;
+        }
+        public Member build(){
+            return new Member(this);
+        }
+
+    }
+
+
 }
 

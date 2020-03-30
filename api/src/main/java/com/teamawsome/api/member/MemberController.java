@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.teamawsome.domain.member.Member.MemberBuilder.*;
+
 @RestController
 @RequestMapping(path = "/members")
 public class MemberController {
@@ -33,7 +35,17 @@ public class MemberController {
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto registerNewUser(@RequestBody MemberRegistryDTO memberRegistryDTO, @PathVariable String user) {
         checkIfValidInput(memberRegistryDTO);
-        Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(), memberRegistryDTO.getFirstName(), memberRegistryDTO.getLastName(), memberRegistryDTO.getStreetName(), memberRegistryDTO.getHouseNumber(), memberRegistryDTO.getPostalCode(), memberRegistryDTO.getCity());
+        //Member newMember = new Member(memberRegistryDTO.getInss(), memberRegistryDTO.geteMail(), memberRegistryDTO.getFirstName(), memberRegistryDTO.getLastName(), memberRegistryDTO.getStreetName(), memberRegistryDTO.getHouseNumber(), memberRegistryDTO.getPostalCode(), memberRegistryDTO.getCity());
+        Member newMember = buildMember()
+                .withInss(memberRegistryDTO.getInss())
+                .withEmail(memberRegistryDTO.geteMail())
+                .withFirstName(memberRegistryDTO.getFirstName())
+                .withLastName(memberRegistryDTO.getLastName())
+                .withStreetName(memberRegistryDTO.getStreetName())
+                .withHouseNumber(memberRegistryDTO.getHouseNumber())
+                .withPostalCode(memberRegistryDTO.getPostalCode())
+                .withCity(memberRegistryDTO.getCity())
+                .build();
         memberRepository.addMember(newMember);
         switch (user) {
             case "member":
