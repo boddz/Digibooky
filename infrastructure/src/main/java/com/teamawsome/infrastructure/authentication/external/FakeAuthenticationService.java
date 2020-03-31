@@ -14,10 +14,10 @@ public class FakeAuthenticationService {
 
     @Autowired
     public FakeAuthenticationService(List<ExternalAuthentication> externalAuthentications) {
-        this.externalAuthentications = new ArrayList<>(); // TODO show the others, this can't be correct
-        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("admin").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
-        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("librarian").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
-        externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("member").withPassword("member").withRoles(List.of(BookstoreRole.MEMBER)));
+        this.externalAuthentications = new ArrayList<>();
+        this.externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("admin").withPassword("admin").withRoles(List.of(BookstoreRole.ADMIN)));
+        this.externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("librarian").withPassword("librarian").withRoles(List.of(BookstoreRole.LIBRARIAN)));
+        this.externalAuthentications.add(ExternalAuthentication.externalAuthentication().withUsername("member").withPassword("member").withRoles(List.of(BookstoreRole.MEMBER)));
     }
 
     public ExternalAuthentication getUser(String username, String password) {
