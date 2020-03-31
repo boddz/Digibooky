@@ -80,11 +80,12 @@ public class BookController {
         return bookAddedDto;
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
+    @PutMapping(produces = "application/json", consumes = "application/json")
+
     public BookDto modifyBook(@RequestBody BookAddedDto bookAddedDto){
-         Book toreturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
-         return bookMapper.transformBookToBookDto(toreturn);
+        Book toreturn = bookRepository.changeBook(bookAddedDto.isbn,bookAddedDto.firstName,bookAddedDto.lastName,bookAddedDto.summary,bookAddedDto.title);
+        return bookMapper.transformBookToBookDto(toreturn);
 
 
 
