@@ -26,7 +26,6 @@ public class Member {
     }*/
 
     private Member(MemberBuilder builder){
-        this.id = counter++;
         this.inss = checkIfValidInss(builder.inss);
         this.eMail = checkIfValidEmail(builder.eMail);
         this.firstName = builder.firstName;
@@ -35,6 +34,7 @@ public class Member {
         this.houseNumber = builder.houseNumber;
         this.postalCode = builder.postalCode;
         this.city = builder.city;
+        this.id = counter++;
     }
 
     private String checkIfValidEmail(String email) {
