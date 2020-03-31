@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamawsome.domain.book.*;
 import com.teamawsome.domain.dto.BookAddedDto;
 import com.teamawsome.domain.dto.BookDto;
+import com.teamawsome.domain.dto.DetailedBookDto;
 import com.teamawsome.domain.service.BookMapper;
 import com.teamawsome.domain.dto.FindByAuthorDto;
 import com.teamawsome.domain.service.LibraryManagement;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -22,6 +22,7 @@ public class BookController {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final LibraryManagement libraryManagement;
+
 
     @Autowired
     public BookController(BookRepository bookRepository, BookMapper bookMapper, LibraryManagement libraryManagement) {
@@ -36,7 +37,7 @@ public class BookController {
     }
 
     @GetMapping(produces = "application/json", consumes = "application/json", path = "/{ISBN}")
-    public BookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
+    public DetailedBookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
         return libraryManagement.getDetailsOfBook(isbn);
     }
 

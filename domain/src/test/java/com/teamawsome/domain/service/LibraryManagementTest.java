@@ -4,14 +4,11 @@ import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
-import com.teamawsome.domain.dto.RentBookDto;
-import com.teamawsome.domain.dto.RentalDto;
-import com.teamawsome.domain.dto.ReturnedDto;
+import com.teamawsome.domain.dto.*;
 import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
 import com.teamawsome.domain.rental.BookRentedOutException;
 import com.teamawsome.domain.rental.Rental;
-import com.teamawsome.domain.dto.LibrarianRentalDto;
 import com.teamawsome.domain.rental.RentalNotFoundException;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.assertj.core.api.Assertions;
@@ -32,13 +29,15 @@ public class LibraryManagementTest {
     private LibraryManagement libraryManagement = new LibraryManagement(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
 
     @Test
-    public void getRentalsByMember_WithNoRentals_ReturnsEmptyList(){
+    public void getRentalsByMember_WithNoRentals_ReturnsEmptyList() {
         Mockito.when(rentalRepository.findOnCondition(Mockito.any())).thenReturn(List.of());
         List<LibrarianRentalDto> actual = libraryManagement.findRentalsByMember("68060105329");
 
         Assertions.assertThat(actual).isNotNull().hasSize(0);
     }
-    @Test public void getRentalsByMember_WithRentals_ReturnsAllRentals(){
+
+    @Test
+    public void getRentalsByMember_WithRentals_ReturnsAllRentals() {
         final Member memberOne = Member.MemberBuilder.buildMember()
                 .withInss("68060105329")
                 .withEmail("harald@somewhere.com")
@@ -69,7 +68,7 @@ public class LibraryManagementTest {
     }
 
     @Test
-    public void getAllOverDueRentals(){
+    public void getAllOverDueRentals() {
         final Member member = Member.MemberBuilder.buildMember()
                 .withInss("68060105329")
                 .withEmail("harald@somewhere.com")
@@ -102,16 +101,16 @@ public class LibraryManagementTest {
         bookRepository.addBook(book);
         RentBookDto bookToBeRentedDto = new RentBookDto("123456", 1);
 
-        LibraryManagement libraryManagement = new LibraryManagement(bookRepository,new MemberRepository(),new RentalRepository(),
+        LibraryManagement libraryManagement = new LibraryManagement(bookRepository, new MemberRepository(), new RentalRepository(),
                 new BookMapper(), new RentalMapper());
         //then
         Assertions.assertThatIllegalArgumentException().isThrownBy(() -> libraryManagement.rentBook(bookToBeRentedDto));
     }
 
     @Test
-    void returnedBook_ifCurrentRentalIdNotOK_throwException(){
+    void returnedBook_ifCurrentRentalIdNotOK_throwException() {
         Mockito.when(rentalRepository.returnRentedBook(1235)).thenThrow(RentalNotFoundException.class);
-        Assertions.assertThatThrownBy(()->libraryManagement.getReturn(1235)).isInstanceOf(RentalNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> libraryManagement.getReturn(1235)).isInstanceOf(RentalNotFoundException.class);
     }
 
     @Test
@@ -144,11 +143,11 @@ public class LibraryManagementTest {
 
 
     @Test
-    void returnedBook_ifCurrentRentalId_returnAllInfo(){
+    void returnedBook_ifCurrentRentalId_returnAllInfo() {
         //given
-        MemberRepository memberRepository=new MemberRepository();
-        BookRepository bookRepository=new BookRepository();
-        RentalRepository rentalRepository=new RentalRepository();
+        MemberRepository memberRepository = new MemberRepository();
+        BookRepository bookRepository = new BookRepository();
+        RentalRepository rentalRepository = new RentalRepository();
 
         Author author = new Author("Leo", "Tolstoj");
         Book book = new Book(author, "123456", "War and Peace", "It's a novel");
@@ -163,12 +162,12 @@ public class LibraryManagementTest {
                 .withPostalCode(9000)
                 .withCity("Gent")
                 .build();
-        Rental newRental=rentalRepository.add(member, book);
+        Rental newRental = rentalRepository.add(member, book);
 
         LibraryManagement libraryManagement = new LibraryManagement(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
         //when
-        ReturnedDto actualResult= libraryManagement.getReturn(newRental.getRentalId());
-        ReturnedDto expectedResult=new ReturnedDto(newRental.getRentalId(), member.getId(), book.getISBN(), "You're on time!");
+        ReturnedDto actualResult = libraryManagement.getReturn(newRental.getRentalId());
+        ReturnedDto expectedResult = new ReturnedDto(newRental.getRentalId(), member.getId(), book.getISBN(), "You're on time!");
         //then
         Assertions.assertThat(actualResult).isEqualTo(expectedResult);
 
@@ -202,5 +201,63 @@ public class LibraryManagementTest {
 
         //then
         assertThat(actualRentalDto.getIsbn()).isEqualTo("123456");
+    }
+
+    @Test
+    void getDetailsOfBook_withBooklentOut() {
+        BookRepository bookRepository = new BookRepository();
+        MemberRepository memberRepository = new MemberRepository();
+        RentalRepository rentalRepository = new RentalRepository();
+        Member member = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
+        Author author = new Author("Leo", "Tolstoj");
+        Book book = new Book(author, "123456", "War and Peace", "It's a novel");
+        bookRepository.addBook(book);
+        rentalRepository.add(member, book);
+
+        LibraryManagement libraryManagement = new LibraryManagement(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
+
+
+        DetailedBookDto actual = libraryManagement.getDetailsOfBook(book.getISBN());
+        DetailedBookDto expected = new BookMapper().toDetailedBookDto(book, member, true);
+
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void getDetailsOfBook_withBookNotlentOut() {
+        BookRepository bookRepository = new BookRepository();
+        MemberRepository memberRepository = new MemberRepository();
+        RentalRepository rentalRepository = new RentalRepository();
+        Member member = Member.MemberBuilder.buildMember()
+                .withInss("00000000097")
+                .withEmail("tom@gm.com")
+                .withFirstName("tom")
+                .withLastName("dc")
+                .withStreetName("straat")
+                .withHouseNumber(5)
+                .withPostalCode(9000)
+                .withCity("Gent")
+                .build();
+        Author author = new Author("Leo", "Tolstoj");
+        Book book = new Book(author, "123456", "War and Peace", "It's a novel");
+        bookRepository.addBook(book);
+
+
+        LibraryManagement libraryManagement = new LibraryManagement(bookRepository, memberRepository, rentalRepository, new BookMapper(), new RentalMapper());
+
+
+        DetailedBookDto actual = libraryManagement.getDetailsOfBook(book.getISBN());
+        DetailedBookDto expected = new BookMapper().toDetailedBookDto(book, null, false);
+
+        Assertions.assertThat(actual).isEqualTo(expected);
     }
 }

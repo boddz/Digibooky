@@ -1,9 +1,12 @@
 package com.teamawsome.api.member;
 
+import com.teamawsome.api.book.BookController;
 import com.teamawsome.domain.dto.MemberDto;
 import com.teamawsome.domain.service.MemberManagement;
 import com.teamawsome.domain.dto.MemberRegistryDTO;
 import com.teamawsome.domain.member.NotUniqueException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping(path = "/members")
 public class MemberController {
     MemberManagement memberManagement;
+    private final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
     public MemberController(MemberManagement memberManagement) {
@@ -53,16 +57,19 @@ public class MemberController {
 
     @ExceptionHandler(NotUniqueException.class)
     protected void notUniqueException(NotUniqueException e, HttpServletResponse response) throws IOException {
+        logger.error(e.getMessage());
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     protected void notException(AccessDeniedException e, HttpServletResponse response) throws IOException {
+        logger.error(e.getMessage());
         response.sendError(403, e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected void illegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
+        logger.error(e.getMessage());
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 }

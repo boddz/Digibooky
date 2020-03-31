@@ -27,7 +27,7 @@ public class LibraryManagement {
 
     @Autowired
     public LibraryManagement(BookRepository bookRepository, MemberRepository memberRepository, RentalRepository rentalRepository,
-                             BookMapper bookMapper, RentalMapper rentalMapper){
+                             BookMapper bookMapper, RentalMapper rentalMapper) {
         this.bookRepository = bookRepository;
         this.memberRepository = memberRepository;
         this.rentalRepository = rentalRepository;
@@ -35,82 +35,97 @@ public class LibraryManagement {
         this.rentalMapper = rentalMapper;
     }
 
-    public List<LibrarianRentalDto> findRentalsByMember(final String inss){
+    public List<LibrarianRentalDto> findRentalsByMember(final String inss) {
         return rentalRepository.findOnCondition(rental -> rental.getMember().getInss().equals(inss))
                 .stream().map(rentalMapper::toLibrarianRentalDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public void deleteBook(String isbn){
+    public void deleteBook(String isbn) {
         bookRepository.deleteBook(isbn);
     }
 
-    public void restoreBook(String isbn){
+    public void restoreBook(String isbn) {
         bookRepository.restoreBook(isbn);
     }
 
-    public BookDto changeBook(BookAddedDto bookToChange){
+    public BookDto changeBook(BookAddedDto bookToChange) {
         return bookMapper.toBookDto(bookRepository.changeBook(bookMapper.toBook(bookToChange)));
     }
 
-    public List<BookDto> findByTitle(String wildCard){
+    public List<BookDto> findByTitle(String wildCard) {
         return bookRepository.findByTitle(wildCard).stream()
                 .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
-    public List<BookDto> findByAuthorName(FindByAuthorDto author){
+
+    public List<BookDto> findByAuthorName(FindByAuthorDto author) {
         return bookRepository.findByAuthorName(author).stream()
                 .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
-    public List<BookDto> findByISBN(String wildCard){
+
+    public List<BookDto> findByISBN(String wildCard) {
         return bookRepository.findByISBNWildCard(wildCard).stream()
                 .map(bookMapper::toBookDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public BookDto getDetailsOfBook(String isbn){
+    public DetailedBookDto getDetailsOfBook(String isbn) {
         try {
-            Book askedBook = bookRepository.getBook(isbn);
-            return bookMapper.toBookDto(askedBook);
+            List<Rental> rentals = rentalRepository.findOnCondition(r -> r.getBook().getISBN().equals(isbn));
+            Rental rental = null;
+            if (rentals.size() > 0) {
+                rental = rentals.get(0);
+            }
+            Book book = bookRepository.getBook(isbn);
+            boolean lentOut = false;
+            Member member = null;
+            if (rental != null) {
+                lentOut = true;
+                member = rental.getMember();
+            }
+
+            return bookMapper.toDetailedBookDto(book, member, lentOut);
+
+
         } catch (BookNotPresentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Go away, no book today!", exception);
         }
 
     }
 
-    public List<BookDto> getAllBooks(){
+    public List<BookDto> getAllBooks() {
         return bookRepository.getAllBooks().stream()
                 .map(bookMapper::toBookDto)
                 .collect(Collectors.toList());
     }
 
-    public BookDto addBook(BookAddedDto toAdd){
+    public BookDto addBook(BookAddedDto toAdd) {
         return bookMapper.toBookDto(bookRepository.addBook(bookMapper.toBook(toAdd)));
     }
 
-    public List<RentalDto> getAllOverDueRentals(){
+    public List<RentalDto> getAllOverDueRentals() {
         return rentalRepository.getAllOverDueRentals().stream()
                 .map(rentalMapper::toRentalDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public ReturnedDto getReturn(Integer rentalId){
-        if(rentalId == null) throw new IllegalArgumentException();
+    public ReturnedDto getReturn(Integer rentalId) {
+        if (rentalId == null) throw new IllegalArgumentException();
 
         Rental returnedRental = rentalRepository.returnRentedBook(rentalId);
         String lateMessage;
-        if(returnedRental.getReturnDate().isBefore(LocalDate.now())){
-            lateMessage="You are late!";
-        }
-        else{
-            lateMessage="You're on time!";
+        if (returnedRental.getReturnDate().isBefore(LocalDate.now())) {
+            lateMessage = "You are late!";
+        } else {
+            lateMessage = "You're on time!";
         }
 
         return new ReturnedDto(returnedRental.getRentalId(), returnedRental.getMember().getId(), returnedRental.getBook().getISBN(), lateMessage);
     }
 
-    public RentalDto rentBook(RentBookDto rentBookDto){
+    public RentalDto rentBook(RentBookDto rentBookDto) {
         Book book;
         book = bookRepository.getBook(rentBookDto.getIsbn());
         rentalRepository.isAvailable(book);
