@@ -25,14 +25,12 @@ public class SpringFoxConfig {
 
     @Bean
     public Docket api() {
-        System.out.println("This is only a test.");
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
-        System.out.println("This should print too.");
         return docket;
     }
 

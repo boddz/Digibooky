@@ -70,14 +70,14 @@ public class BookController {
          return libraryManagement.changeBook(bookToChange);
     }
 
-    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     @PutMapping(path="/delete/{isbn}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteBook(@PathVariable("isbn") String isbn){
         libraryManagement.deleteBook(isbn);
     }
 
-    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     @PutMapping(path="/restore/{isbn}")
     @ResponseStatus(HttpStatus.OK)
     public void restoreBook(@PathVariable("isbn") String isbn){

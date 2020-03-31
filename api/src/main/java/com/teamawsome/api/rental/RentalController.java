@@ -37,10 +37,9 @@ public class RentalController {
         this.rentalRepository = rentalRepository;
         this.memberRepository = memberRepository;
         this.libraryManagement = libraryManagement;
-
     }
 
-    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     @GetMapping(produces = "application/json;charset=UTF-8", params = {"withInss"})
     public List<LibrarianRentalDto> findBooksLentToMemberIdentifiedByINSS(@RequestParam("withInss") String inss){
         return libraryManagement.findRentalsByMember(inss);
@@ -57,7 +56,7 @@ public class RentalController {
     }
 
     @GetMapping(produces = "application/json", path="/overdue")
-    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PreAuthorize("hasAuthority('MAKE_LIBRARIAN')")
     public List<RentalDto> getListOfOverDueBooks(){
         return libraryManagement.getAllOverDueRentals();
     }
