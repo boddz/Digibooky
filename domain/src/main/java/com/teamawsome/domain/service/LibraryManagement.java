@@ -3,17 +3,17 @@ package com.teamawsome.domain.service;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookNotPresentException;
 import com.teamawsome.domain.book.BookRepository;
-import com.teamawsome.domain.dto.BookAddedDto;
-import com.teamawsome.domain.dto.BookDto;
-import com.teamawsome.domain.dto.FindByAuthorDto;
+import com.teamawsome.domain.dto.*;
+import com.teamawsome.domain.member.Member;
 import com.teamawsome.domain.member.MemberRepository;
-import com.teamawsome.domain.dto.LibrarianRentalDto;
+import com.teamawsome.domain.rental.Rental;
 import com.teamawsome.domain.rental.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,4 +88,36 @@ public class LibraryManagement {
     public BookDto addBook(BookAddedDto toAdd){
         return bookMapper.toBookDto(bookRepository.addBook(bookMapper.toBook(toAdd)));
     }
+
+    public List<RentalDto> getAllOverDueRentals(){
+        return rentalRepository.getAllOverDueRentals().stream()
+                .map(rentalMapper::toRentalDto)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public ReturnedDto getReturn(Integer rentalId){
+        if(rentalId == null) throw new IllegalArgumentException();
+
+        Rental returnedRental = rentalRepository.returnRentedBook(rentalId);
+        String lateMessage;
+        if(returnedRental.getReturnDate().isBefore(LocalDate.now())){
+            lateMessage="You are late!";
+        }
+        else{
+            lateMessage="You're on time!";
+        }
+
+        return new ReturnedDto(returnedRental.getRentalId(), returnedRental.getMember().getId(), returnedRental.getBook().getISBN(), lateMessage);
+    }
+
+    public RentalDto rentBook(RentBookDto rentBookDto){
+        Book book;
+        book = bookRepository.getBook(rentBookDto.getIsbn());
+        rentalRepository.isAvailable(book);
+        Member member;
+        member = memberRepository.getMemberById(rentBookDto.getMemberId());
+        Rental newRental = rentalRepository.add(member, book);
+        return new RentalDto(newRental.getRentalId(), newRental.getMember().getId(), rentBookDto.getIsbn(), newRental.getReturnDate());
+    }
+
 }

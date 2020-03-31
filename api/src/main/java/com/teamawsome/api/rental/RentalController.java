@@ -20,18 +20,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("rentals")
 public class RentalController {
-
-    BookRepository bookRepository;
-    RentalRepository rentalRepository;
-    MemberRepository memberRepository;
-    LibraryManagement libraryManagement;
+    private final LibraryManagement libraryManagement;
+    private final BookRepository bookRepository;
+    private final RentalRepository rentalRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
     public RentalController(BookRepository bookRepository, RentalRepository rentalRepository, MemberRepository memberRepository, LibraryManagement libraryManagement) {
@@ -39,6 +37,7 @@ public class RentalController {
         this.rentalRepository = rentalRepository;
         this.memberRepository = memberRepository;
         this.libraryManagement = libraryManagement;
+
     }
 
     @PreAuthorize("hasAuthority('LIBRARIAN')")
@@ -49,26 +48,18 @@ public class RentalController {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public RentalDto rentBook(@RequestBody RentBookDto rentBookDto) {
-        Book book;
-        book = bookRepository.getBook(rentBookDto.getIsbn());
-        rentalRepository.isAvailable(book);
-        Member member;
-        member = memberRepository.getMemberById(rentBookDto.getMemberId());
-        Rental newRental = rentalRepository.add(member, book);
-        return new RentalDto(newRental.getRentalId(), newRental.getMember().getId(), rentBookDto.getIsbn(), newRental.getReturnDate());
+        return libraryManagement.rentBook(rentBookDto);
     }
-    @GetMapping(produces = "application/json", path="/return/{rentalId}")
-    public ReturnedDto returnBook(@PathVariable int rentalId){
-        Rental returnedRental=rentalRepository.returnRentedBook(rentalId);
-        String lateMessage;
-        if(returnedRental.getReturnDate().compareTo(LocalDate.now())<0){
-            lateMessage="You are late!";
-        }
-        else{
-            lateMessage="You're on time!";
-        }
 
-        return new ReturnedDto(returnedRental.getRentalId(), returnedRental.getMember().getId(), returnedRental.getBook().getISBN(), lateMessage);
+    @GetMapping(produces = "application/json", path="/return/{rentalId}")
+    public ReturnedDto returnBook(@PathVariable Integer rentalId){
+        return libraryManagement.getReturn(rentalId);
+    }
+
+    @GetMapping(produces = "application/json", path="/overdue")
+    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    public List<RentalDto> getListOfOverDueBooks(){
+        return libraryManagement.getAllOverDueRentals();
     }
 
     /*

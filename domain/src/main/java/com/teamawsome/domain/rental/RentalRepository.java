@@ -5,6 +5,7 @@ import com.teamawsome.domain.member.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,6 +38,10 @@ public class RentalRepository {
         rentalList.add(newRental);
         return newRental;
     }
+    // testing support method
+    void add(Rental rental){
+        rentalList.add(rental);
+    }
 
     public Rental returnRentedBook(int rentalId){
         for (int i=0;i<rentalList.size();i++) {
@@ -49,5 +54,13 @@ public class RentalRepository {
 
     public List<Rental> findOnCondition(Predicate<Rental> condition){
         return rentalList.stream().filter(condition).collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<Rental> getAllOverDueRentals(){
+        return findOnCondition(this::bookIsOverDue);
+    }
+
+    private boolean bookIsOverDue(Rental rental) {
+        return rental.getReturnDate().isBefore(LocalDate.now());
     }
 }

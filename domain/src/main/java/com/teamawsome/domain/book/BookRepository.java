@@ -86,4 +86,5 @@ public class BookRepository {
         restored.ifPresent(book -> book.setDestroyed(false));
         return restored;
     }
+
 }

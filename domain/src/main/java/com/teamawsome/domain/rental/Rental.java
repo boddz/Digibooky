@@ -14,11 +14,14 @@ public class Rental {
     private Member member;
     private LocalDate startingDate;
 
-    public Rental(int rentalId, Member member, Book book) {
+    public Rental(int rentalId, Member member, Book book){
+        this(rentalId, member, book, LocalDate.now());
+    }
+    public Rental(int rentalId, Member member, Book book, LocalDate startingDate) {
         this.rentalId = rentalId;
         this.member = member;
         this.book = book;
-        startingDate = LocalDate.now();
+        this.startingDate = startingDate;
     }
 
     public Book getBook() {
