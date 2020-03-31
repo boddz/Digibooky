@@ -12,6 +12,8 @@ public class MemberRepository {
     List<Member> memberList = new ArrayList<>();
 
     public void addMember(Member member) {
+        isUniqueEmail(member.geteMail());
+        isUniqueInss(member.getInss());
         memberList.add(member);
     }
 

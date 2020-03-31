@@ -1,4 +1,4 @@
-package com.teamawsome.domain.book;
+package com.teamawsome.domain.dto;
 
 import java.util.Objects;
 
@@ -6,7 +6,7 @@ public class FindByAuthorDto {
     private String firstName;
     private String lastName;
 
-    private FindByAuthorDto(){}
+    private FindByAuthorDto(){} // needed for Jackson' reflection-based 'class to JSON' conversion
     public FindByAuthorDto(String firstName, String lastName){
         this.lastName = lastName;
         this.firstName = firstName;

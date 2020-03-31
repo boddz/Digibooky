@@ -7,6 +7,7 @@ public class Book {
     private String ISBN;
     private String title;
     private String summary;
+    private boolean destroyed;
 
 
     public Book(Author author, String ISBN, String title, String summary){
@@ -31,6 +32,9 @@ public class Book {
     public String getSummary() {
         return summary;
     }
+    public boolean isDestroyed(){
+        return destroyed;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -48,13 +52,9 @@ public class Book {
         return Objects.hash(getAuthor(), getISBN(), getTitle(), getSummary());
     }
 
-    public void toModify(String lastName, String firstName) {
 
-    }
-
-    public void setAuthor(String lastName, String firstName) {
-        Author toChange= new Author(firstName, lastName);
-        this.author = toChange;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public void setISBN(String ISBN) {
@@ -67,5 +67,9 @@ public class Book {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setDestroyed(boolean bookIsDestroyed){
+        destroyed = bookIsDestroyed;
     }
 }

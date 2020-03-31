@@ -1,9 +1,11 @@
 package com.teamawsome.domain.book;
 
+import com.teamawsome.domain.dto.FindByAuthorDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -13,20 +15,27 @@ public class BookRepository {
 
 
     public List<Book> getAllBooks(){
-        return bookList;
+        return bookList.stream().filter(book -> !book.isDestroyed()).collect(Collectors.toUnmodifiableList());
     }
 
 
     public Book addBook(Book book) {
         bookList.add(book);
         return book;
-
     }
-    public Book getBook(String ISBN){
+
+    private Optional<Book> getBookEvenIfDeleted(String ISBN){
         return bookList.stream()
                 .filter(book -> book.getISBN().equals(ISBN))
-                .findFirst()
-                .orElseThrow(BookNotPresentException::new);
+                .findFirst();
+    }
+    public Book getBook(String ISBN){
+        Optional<Book> book = getBookEvenIfDeleted(ISBN);
+        if(book.isPresent() && !book.get().isDestroyed()){
+            return book.get();
+        } else {
+            throw new BookNotPresentException();
+        }
     }
 
     public List<Book> findByISBNWildCard(final String wildcard){
@@ -54,11 +63,28 @@ public class BookRepository {
         return input.replace("*",".*").replace("?",".?");
     }
 
-    public Book changeBook(String isbn, String firstName, String lastName, String summary, String title) {
-        Book bookToModify = getBook(isbn);
-        bookToModify.setAuthor(lastName,firstName);
-        bookToModify.setTitle(title);
-        bookToModify.setSummary(summary);
-        return bookToModify;
+    public Book changeBook(Book updatedBook) {
+
+        Optional<Book> bookToModify = getBookEvenIfDeleted(updatedBook.getISBN());
+        Book toModify = null;
+        if(bookToModify.isPresent()) {
+            toModify = bookToModify.get();
+            toModify.setAuthor(updatedBook.getAuthor());
+            toModify.setTitle(updatedBook.getTitle());
+            toModify.setSummary(updatedBook.getSummary());
+        }
+        return toModify;
     }
+
+    public Optional<Book> deleteBook(String isbn){
+        Optional<Book> deleted = getBookEvenIfDeleted(isbn);
+        deleted.ifPresent(book -> book.setDestroyed(true));
+        return deleted;
+    }
+    public Optional<Book> restoreBook(String isbn){
+        Optional<Book> restored = getBookEvenIfDeleted(isbn);
+        restored.ifPresent(book -> book.setDestroyed(false));
+        return restored;
+    }
+
 }

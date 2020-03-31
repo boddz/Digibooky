@@ -8,14 +8,16 @@ public class Author {
 
     private Author(){}
     public Author(String firstName, String lastName){
-        this.firstName=firstName;
-        this.lastName=checkIfNotEmpty(lastName);
+        assertNotEmpty(lastName);
+
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
-    private String checkIfNotEmpty(String lastName) {
-        if (!(lastName == "")) {
-            return lastName;
+
+    private void assertNotEmpty(String text) {
+        if (text.isBlank()) {
+            throw new IllegalArgumentException("Put in something, you moron!");
         }
-        throw new IllegalArgumentException("Put in something, you moron!");
     }
 
 

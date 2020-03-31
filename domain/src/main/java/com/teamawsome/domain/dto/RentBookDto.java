@@ -1,7 +1,6 @@
-package com.teamawsome.api.rental;
+package com.teamawsome.domain.dto;
 
 public class RentBookDto {
-
     private String isbn;
     private int memberId;
 

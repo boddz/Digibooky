@@ -1,4 +1,4 @@
-package com.teamawsome.api.member;
+package com.teamawsome.domain.dto;
 
 public class MemberRegistryDTO {
     private String inss;
@@ -9,8 +9,9 @@ public class MemberRegistryDTO {
     private int houseNumber;
     private int postalCode;
     private String city;
+    private String password;
 
-    public MemberRegistryDTO(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city) {
+    public MemberRegistryDTO(String inss, String eMail, String firstName, String lastName, String streetName, int houseNumber, int postalCode, String city, String password) {
         this.inss = inss;
         this.eMail = eMail;
         this.firstName = firstName;
@@ -19,6 +20,7 @@ public class MemberRegistryDTO {
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.city = city;
+        this.password = password;
     }
 
     public String getInss() {
@@ -51,5 +53,9 @@ public class MemberRegistryDTO {
 
     public String getCity() {
         return city;
+    }
+
+    public String getPassword(){
+        return password;
     }
 }

@@ -8,19 +8,20 @@ import java.time.LocalDate;
 public class Rental {
 
     public static final int DEFAULT_RENTING_TIME = 21;
-    private static int counter = 1;
 
     private int rentalId;
     private Book book;
     private Member member;
     private LocalDate startingDate;
 
-    public Rental(Member member, Book book) {
-        this.rentalId = counter;
-        counter++;
+    public Rental(int rentalId, Member member, Book book){
+        this(rentalId, member, book, LocalDate.now());
+    }
+    public Rental(int rentalId, Member member, Book book, LocalDate startingDate) {
+        this.rentalId = rentalId;
         this.member = member;
         this.book = book;
-        startingDate = LocalDate.now();
+        this.startingDate = startingDate;
     }
 
     public Book getBook() {

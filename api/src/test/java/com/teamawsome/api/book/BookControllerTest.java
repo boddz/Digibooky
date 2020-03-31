@@ -2,11 +2,17 @@ package com.teamawsome.api.book;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamawsome.api.rental.ReturnedDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.book.BookRepository;
-import com.teamawsome.domain.book.FindByAuthorDto;
+import com.teamawsome.domain.dto.BookAddedDto;
+import com.teamawsome.domain.dto.BookDto;
+import com.teamawsome.domain.member.MemberRepository;
+import com.teamawsome.domain.rental.RentalRepository;
+import com.teamawsome.domain.service.BookMapper;
+import com.teamawsome.domain.dto.FindByAuthorDto;
+import com.teamawsome.domain.service.LibraryManagement;
+import com.teamawsome.domain.service.RentalMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,11 +25,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-
-
-import static org.mockito.ArgumentMatchers.any;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -184,7 +185,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedEffective, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByAuthorName(new FindByAuthorDto("",""))).thenReturn(List.of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withAuthor","{\"firstName\":null, \"lastName\":null}")
                 .with(user("user")
@@ -254,7 +255,7 @@ class BookControllerTest {
 
         JSONAssert.assertEquals(expectedLowlevel, actual, JSONCompareMode.STRICT);
 
-        Mockito.when(bookRepository.findByTitle("")).thenReturn(List.<Book>of());
+        Mockito.when(bookRepository.findByTitle("")).thenReturn(List.of());
         actual = mockMvc.perform(get("/books")
                 .queryParam("withTitle","")
                 .with(user("user")
@@ -286,7 +287,8 @@ class BookControllerTest {
     public void modifyBook() {
         //GIVEN
         BookRepository bookRepository = new BookRepository();
-        BookController control = new BookController(bookRepository, new BookMapper());
+        LibraryManagement libraryManagement = new LibraryManagement(bookRepository, new MemberRepository(), new RentalRepository(), new BookMapper(), new RentalMapper());
+        BookController control = new BookController(bookRepository,new BookMapper(), libraryManagement);
         Author author = new Author("Tom", "Decrock");
         Book old = new Book(author, "123456", "How to chill with kids", "Tips and tricks to relax while your kids are running around");
         bookRepository.addBook(old);

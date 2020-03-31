@@ -1,9 +1,9 @@
 package com.teamawsome.api.book;
 
-import com.teamawsome.api.book.BookDto;
-import com.teamawsome.api.book.BookMapper;
+import com.teamawsome.domain.dto.BookDto;
 import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
+import com.teamawsome.domain.service.BookMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +16,6 @@ class BookMapperTest {
         BookDto book1Dto = new BookDto(book1.getAuthor(), book1.getISBN(), book1.getTitle(), book1.getSummary());
         BookMapper bookMapper = new BookMapper();
 
-        Assertions.assertThat(bookMapper.transformBookToBookDto(book1)).isEqualTo(book1Dto);
+        Assertions.assertThat(bookMapper.toBookDto(book1)).isEqualTo(book1Dto);
     }
 }

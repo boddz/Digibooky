@@ -1,5 +1,4 @@
-package com.teamawsome.api.rental;
-
+package com.teamawsome.domain.dto;
 import java.util.Objects;
 
 public class ReturnedDto {
@@ -29,16 +28,6 @@ public class ReturnedDto {
 
     public String getOntimeMessage() {
         return ontimeMessage;
-    }
-
-    @Override
-    public String toString() {
-        return "ReturnedDto{" +
-                "rentalId=" + rentalId +
-                ", memberId=" + memberId +
-                ", isbn='" + isbn + '\'' +
-                ", ontimeMessage='" + ontimeMessage + '\'' +
-                '}';
     }
 
     @Override

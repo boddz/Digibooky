@@ -1,13 +1,11 @@
-package com.teamawsome.domain.rental;
+package com.teamawsome.domain.dto;
 
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.member.Member;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class LibrarianRentalDto {
-
     private int rentalId;
     private Book book;
     private Member member;
@@ -22,9 +20,6 @@ public class LibrarianRentalDto {
         this.returnDate = returnDate;
     }
 
-    public static LibrarianRentalDto fromRental(Rental rental){
-        return new LibrarianRentalDto(rental.getRentalId(),rental.getBook(),rental.getMember(),rental.getStartingDate(),rental.getReturnDate());
-    }
 
     public int getRentalId(){
         return rentalId;

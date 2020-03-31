@@ -1,13 +1,13 @@
-package com.teamawsome.api.book;
+package com.teamawsome.domain.dto;
 
 import java.util.Objects;
 
 public class BookAddedDto {
-    String isbn;
-    String title;
-    String lastName;
-    String firstName;
-    String summary;
+    private String isbn;
+    private String title;
+    private String lastName;
+    private String firstName;
+    private String summary;
 
     public BookAddedDto(String isbn, String title, String lastName, String firstName, String summary) {
         this.isbn = isbn;
@@ -52,16 +52,5 @@ public class BookAddedDto {
     @Override
     public int hashCode() {
         return Objects.hash(getIsbn(), getTitle(), getLastName(), getFirstName(), getSummary());
-    }
-
-    @Override
-    public String toString() {
-        return "BookAddedDto{" +
-                "isbn='" + isbn + '\'' +
-                ", title='" + title + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", summary='" + summary + '\'' +
-                '}';
     }
 }
