@@ -5,6 +5,8 @@ import com.teamawsome.domain.book.Author;
 import com.teamawsome.domain.book.Book;
 import com.teamawsome.domain.dto.BookAddedDto;
 import com.teamawsome.domain.dto.BookDto;
+import com.teamawsome.domain.dto.DetailedBookDto;
+import com.teamawsome.domain.member.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,5 +21,9 @@ public class BookMapper {
     public Book toBook(BookAddedDto bookAddedDto){
        return new Book(new Author(bookAddedDto.getFirstName(), bookAddedDto.getLastName()),
                bookAddedDto.getIsbn(), bookAddedDto.getTitle(), bookAddedDto.getSummary());
+    }
+
+    public DetailedBookDto toDetailedBookDto(Book book , Member member , boolean isRentedOut) {
+        return new DetailedBookDto(book.getAuthor(), book.getISBN(), book.getTitle(), book.getSummary(), isRentedOut, member);
     }
 }

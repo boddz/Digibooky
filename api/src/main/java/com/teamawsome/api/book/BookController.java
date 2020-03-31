@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamawsome.domain.book.*;
 import com.teamawsome.domain.dto.BookAddedDto;
 import com.teamawsome.domain.dto.BookDto;
+import com.teamawsome.domain.dto.DetailedBookDto;
 import com.teamawsome.domain.service.BookMapper;
 import com.teamawsome.domain.dto.FindByAuthorDto;
 import com.teamawsome.domain.service.LibraryManagement;
@@ -36,7 +37,7 @@ public class BookController {
     }
 
     @GetMapping(produces = "application/json", consumes = "application/json", path = "/{ISBN}")
-    public BookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
+    public DetailedBookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
         return libraryManagement.getDetailsOfBook(isbn);
     }
 
