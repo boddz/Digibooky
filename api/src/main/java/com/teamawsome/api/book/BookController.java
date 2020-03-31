@@ -36,7 +36,7 @@ public class BookController {
         return libraryManagement.getAllBooks();
     }
 
-    @GetMapping(produces = "application/json", consumes = "application/json", path = "/{ISBN}")
+    @GetMapping(produces = "application/json", path = "/{ISBN}")
     public DetailedBookDto getDetailsOfBook(@PathVariable("ISBN") String isbn) {
         return libraryManagement.getDetailsOfBook(isbn);
     }
