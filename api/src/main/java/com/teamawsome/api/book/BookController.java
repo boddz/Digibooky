@@ -10,14 +10,10 @@ import com.teamawsome.domain.dto.DetailedBookDto;
 import com.teamawsome.domain.service.BookMapper;
 import com.teamawsome.domain.dto.FindByAuthorDto;
 import com.teamawsome.domain.service.LibraryManagement;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
